@@ -21,8 +21,8 @@ If there is an error different from a connection problem (example: wrong pasword
 If something doesn't work try to view the log, it has useful informations inside; you can also set the log option from commandline.  
 
 Version history:  
-1.0.0.1 current version (added local log option, minor fixes)
-1.0.0.0 initial version
+1.0.0.1 current version (added local log option, minor fixes)  
+1.0.0.0 initial version  
 
 ##FAQ:
 ###When the program starts updating the ddns?
@@ -98,7 +98,7 @@ Please keep in mind that for example viewing saved passowrds of wifi or browser 
 If your pc is not full disk encrypted and is used by someone that you don't trust (probably thee is no hope but...) edit the acl on the file and deny access to anyone except you (and deny the ability to change acl too).  
 
 ###How to verify the digital signature?
-You will need [GPG, Gnu Privacy Guard](https://gnupg.org/) or [Gpg4win](https://www.gpg4win.org/).  
+You will need [GPG (Gnu Privacy Guard)](https://gnupg.org/) or [Gpg4win](https://www.gpg4win.org/).  
 You will also need to read it's manual.  
 As i said above [Qubes OS](https://www.qubes-os.org/doc/verifying-signatures/) has a detailed page on digital signatures and what they can (and can't) prove.  
 Basic steps are:  

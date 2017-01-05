@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set di attributi. Modificare i valori di questi attributi per modificare le informazioni
 // associate a un assembly.
 [assembly: AssemblyTitle("DynamicDnsUpdater")]
-[assembly: AssemblyDescription("Allows you to update the Dynamic DNS easily")]
+[assembly: AssemblyDescription("Allows you to keep updated the Dynamic DNS easily")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Made by Nesos")]
 [assembly: AssemblyProduct("DynamicDnsUpdater")]

@@ -308,7 +308,7 @@ namespace DynamicDnsUpdater
                 string programNewPath = @"C:\Program Files\DynamicDnsUpdater\";
                 string programNewExe = programNewPath + "DynamicDnsUpdater.exe";
                 string spath = "\"" + programNewExe + "\"";
-                if (MessageBox.Show("Program (and current settings) will be copied in " + spath + "\n\nKeep in mind that on boot the program will load the copied settings; so add the autorun entry only when you have correct (working) settings\nAre you sure you want to continue?\n\nWhy this?\nSo there is no privilege escalation bug and user can not replace the exe with something other to gain admin privileges", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                if (MessageBox.Show("Program (and current settings) will be copied in " + spath + "\n\nKeep in mind that on boot the program will load the copied settings; so add the autorun entry only when you have correct (working) settings\nARE YOU SURE YOU WANT TO CONTINUE?\n\nWhy this?\nSo there is no privilege escalation bug and user can not replace the exe with something other to gain admin privileges", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 {
                     optAutorunAdmin.Checked = false;
                     optAutorunNo.Checked = true;
@@ -328,7 +328,10 @@ namespace DynamicDnsUpdater
                         throw new Exception("Can't copy exe to destination");
 
                     if (File.Exists(currPath + AppSettings.settingsFileName) == true)
-                        File.Copy(currPath + AppSettings.settingsFileName, programNewPath + AppSettings.settingsFileName, true);
+                    {
+                        if (currPath + AppSettings.settingsFileName != programNewPath + AppSettings.settingsFileName) //copy only if they are in different locations
+                            File.Copy(currPath + AppSettings.settingsFileName, programNewPath + AppSettings.settingsFileName, true);
+                    }
                     else
                         throw new Exception("Save settings before turning on autorun!");
 
