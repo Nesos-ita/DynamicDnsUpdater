@@ -12,6 +12,7 @@
 
         //Settings from cmdLine
         public static bool logEnabled = false;
+        public static bool logAppDir = false;
 
         //settings from regedit / SchTasks
         public static bool autorunUserEnabled = false;
@@ -21,5 +22,7 @@
         public static bool exitUpdateLoop = false;
         public static utilityFunctions.UpdateStatus lastUpdateStatus=utilityFunctions.UpdateStatus.NotConnected;
         public static bool lastUpdateStatusChanged = false;
+        public static string logFileName = "ddu.log";
+        public static string settingsFileName = "dduSettings.txt";
     }
 }

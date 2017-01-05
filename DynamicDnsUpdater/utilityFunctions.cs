@@ -13,14 +13,13 @@ namespace DynamicDnsUpdater
     class utilityFunctions
     {
         StreamWriter streamLog = null;
+        StreamWriter streamLogLocal = null;
         struct timerWait
         {
             public DateTime myTime;
             public DateTime oldTime;
         };
-        const string settingsFileName = "dduSettings.txt"; //settings file name
         const string taskName = "DynamicDnsUpdater"; //both regedit and schtasks
-        const string logFileName = "ddu.log"; //placed in %TEMP%
         //const string updateLinkIPv6= "https://update6.dedyn.io"; //NOT USED NOW
         const string checkIpLink = "https://checkip.dedyn.io";
 
@@ -81,8 +80,21 @@ namespace DynamicDnsUpdater
             try
             {
                 string tmppath = Path.GetTempPath();
-                streamLog = new StreamWriter(tmppath + logFileName, true);
+                streamLog = new StreamWriter(tmppath + AppSettings.logFileName, true);
                 streamLog.AutoFlush = true;
+            }
+            catch (Exception) { }
+        }
+
+        /// <summary>
+        /// Opens/create the log file
+        /// </summary>
+        void InitLogLocal()
+        {
+            try
+            {
+                streamLogLocal = new StreamWriter(GetExePath() + AppSettings.logFileName, true);
+                streamLogLocal.AutoFlush = true;
             }
             catch (Exception) { }
         }
@@ -97,13 +109,27 @@ namespace DynamicDnsUpdater
             {
                 if (streamLog == null)
                     InitLog();
-                try
+                if (streamLogLocal==null)
+                    InitLogLocal();
+                if (streamLog != null)
                 {
-                    DateTime t = DateTime.Now;
-                    //string ora = t.Day.ToString().PadLeft(2, '0') + "-" + t.Month.ToString().PadLeft(2, '0') + "-" + t.Year.ToString().PadLeft(4, '0') + "," + t.Hour.ToString().PadLeft(2, '0') + "-" + t.Minute.ToString().PadLeft(2, '0') + "-" + t.Second.ToString().PadLeft(2, '0') + " - ";
-                    streamLog.WriteLine(t.ToString() + " - " + str);
+                    try
+                    {
+                        DateTime t = DateTime.Now;
+                        //string ora = t.Day.ToString().PadLeft(2, '0') + "-" + t.Month.ToString().PadLeft(2, '0') + "-" + t.Year.ToString().PadLeft(4, '0') + "," + t.Hour.ToString().PadLeft(2, '0') + "-" + t.Minute.ToString().PadLeft(2, '0') + "-" + t.Second.ToString().PadLeft(2, '0') + " - ";
+                        streamLog.WriteLine(t.ToString() + " - " + str);
+                    }
+                    catch (Exception) { }
                 }
-                catch (Exception) { }
+                if (streamLogLocal != null)
+                {
+                    try
+                    {
+                        DateTime t = DateTime.Now;
+                        streamLogLocal.WriteLine(t.ToString() + " - " + str);
+                    }
+                    catch (Exception) { }
+                }
             }
         }
 
@@ -437,7 +463,7 @@ namespace DynamicDnsUpdater
         public bool ReadSettings()
         {
             string path = GetExePath();
-            path += settingsFileName;
+            path += AppSettings.settingsFileName;
             if (File.Exists(path) == true)
             {
                 try
@@ -481,7 +507,7 @@ namespace DynamicDnsUpdater
         public bool SaveSettings()
         {
             string path = GetExePath();
-            path += settingsFileName;
+            path += AppSettings.settingsFileName;
             try
             {
                 FileStream f = new FileStream(path, FileMode.Create, FileAccess.Write);

@@ -1,12 +1,10 @@
 # DynamicDnsUpdater
-Allows you to update the Dynamic DNS easily
+Allows you to keep updated the Dynamic DNS easily
 
 ##How to use:  
 * Download the program under "Compiled Binary\DynamicDnsUpdater.exe"  
-* Check autenticity and integrity (check digital signature) (it is not yet possible because exe is signed with a key that is not public, i must create a public code signing key)  
-[Here](https://www.qubes-os.org/doc/verifying-signatures/) you can find more info about digital signatures and why they are important, PS [Qubes OS](https://www.qubes-os.org/) it's an awesome project!
-* Double click  
-* Follow on screen instructions  
+* Optional but suggested: Check the digital signature ([Here](https://www.qubes-os.org/doc/verifying-signatures/) you can find more info about digital signatures and why they are important.)  
+* Open and follow on screen instructions  
 
 **for [deSEC](https://desec.io/#!/en/) users:**  
 -username field: fill with your hostname (example: something.dedyn.io)  
@@ -19,8 +17,12 @@ If for some reason you don't have .NET framework 3.0 (but seems that is installe
 [.NET 3.0 (64bit)](http://go.microsoft.com/fwlink/?LinkId=98106)  
 [.NET 3.0 (32bit)](http://download.microsoft.com/download/8/F/E/8FEEE89D-9E4F-4BA3-993E-0FFEA8E21E1B/NetFx30SP1_x86.exe)  
 
-If there is an error (example: wrong pasword) the updater will stop (red square), check if settings are correct.  
+If there is an error different from a connection problem (example: wrong pasword) the updater will stop (red square), check if settings are correct.  
 If something doesn't work try to view the log, it has useful informations inside; you can also set the log option from commandline.  
+
+Version history:  
+1.0.0.1 current version (added local log option, minor fixes)
+1.0.0.0 initial version
 
 ##FAQ:
 ###When the program starts updating the ddns?
@@ -39,7 +41,7 @@ That's not a question; anyway i use it because it's a safe language (check secur
 ###Can i set it to automatically start with windows?
 Yes, you set it to run with windows and you can forget about always opening it; very useful.  
 Default option is background+log so there will not be a window.  
-If for some reason you want to stop it you can terminate its process or disable autorun and reboot.
+If for some reason you want to stop it you can terminate it's process or disable autorun and reboot.
 
 ###Why there are two autorun options?
 In this way you can run the program only after your user login and you don't need admin privileges to run it (you may don't trust it enough to give it admin privileges). 
@@ -51,6 +53,7 @@ If you are interested in how it works:
 ###What is the log option and what does it log?
 I respect your privacy and i don't collect anything from you!! NEVER!  
 Log option can be activated via GUI or by command line "-log"; it creates a log file in %TEMP%\ddu.log where %temp% is a variable that point to _current_ user temp directory (so if you auto run on boot probably c:\windows\temp; dont get tricked).  
+If you set the option "-loghere" the log will be created where the program is stored (if you set both log option only this one will be activated)  
 Inside the file you can find useful informations about the update result history (aka if the program is working correctly).
 
 ###Why the password is stored in plaintext in settings file?
@@ -82,10 +85,10 @@ Short answer: because to encrypt a password i need another passowrd; doesn't sol
 Why don't you obfuscate it? because it only gives a false sense of security and project is open source.  
 For more details keep reading:  
 there are two kind of stored paswords:  
--passwords stored in a service that you control (on your pc)  
--passwords stored in a service out of your control (internet)  
+-passwords stored where you have control (on your pc)  
+-passwords stored out of your control (internet)  
 The first type (like the windows login, full disk encryption password, password manager _master_ pasword) can be stored in a secure way: by not storing it at all; this might seems weird but is the only secure way to do it.  
-What must be proved is that the user knows the correct password and can be done without knowing the password: in fact what is stored is a (stalted) hash of the password.  
+What must be proved is that the user knows the correct password and can be done without knowing the password: in fact what is stored is a (stalted) hash of the password (or nothing at all for encryption passwords).  
 The second type is the facebook login, email login, desec password...  
 _they_ store a (salted) hash of the password because they own the service but we must send them a plaintext password (encrypted _while in transit_ using https)  
 so it doesn't matter if i encode/obfuscate/encrypt with aes256/...; right before i send it to them it must be plaintext and if someone want to steal it he have only to wait that the program decrypt it for him.  
@@ -93,3 +96,16 @@ Think like the copy protection of music it is stupid and useless, as soon as you
 The only secure way to store a password as i said is not store it at all but this is not an option because we want that this program works automatically.  
 Please keep in mind that for example viewing saved passowrds of wifi or browser takes less than one second, there is nothing to crack; the fact that you don't know where/how they are stored doesn't make them more secure; it only gives you a false sense of security.  
 If your pc is not full disk encrypted and is used by someone that you don't trust (probably thee is no hope but...) edit the acl on the file and deny access to anyone except you (and deny the ability to change acl too).  
+
+###How to verify the digital signature?
+You will need [GPG, Gnu Privacy Guard](https://gnupg.org/) or [Gpg4win](https://www.gpg4win.org/).  
+You will also need to read it's manual.  
+As i said above [Qubes OS](https://www.qubes-os.org/doc/verifying-signatures/) has a detailed page on digital signatures and what they can (and can't) prove.  
+Basic steps are:  
+* Obtaining a copy of my public key and importing it (you need to do this only _once_)  
+* Verifying that the obtained key is authentic (if you trust git https it is)  
+* Download program and it's signature  
+* Verify the signature  
+
+###Why the key is not on keyservers?
+Because keyservers are just a place to download keys and the key can be downloaded directly from here, from a security point of view they are useless (they are not used to prove anything).  

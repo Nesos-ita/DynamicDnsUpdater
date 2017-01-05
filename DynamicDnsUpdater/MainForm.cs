@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -137,7 +135,15 @@ namespace DynamicDnsUpdater
         {
             optAutorunUser.Checked = utils.TaskExist(true);
             optAutorunAdmin.Checked = utils.TaskExist(false);
-            chkLog.Checked = AppSettings.logEnabled;
+            if (AppSettings.logEnabled)
+            {
+                optLogNo.Checked = false;
+                btnOpenLog.Enabled = true;
+                if (AppSettings.logAppDir)
+                    optLogAppDir.Checked = true;
+                else
+                    optLogTempDir.Checked = true;
+            }
             if (utils.IsUserAdmin() == false)
                 optAutorunAdmin.Enabled = false;
             if (optAutorunUser.Checked || optAutorunAdmin.Checked)
@@ -162,6 +168,9 @@ namespace DynamicDnsUpdater
             optAutorunNo.CheckedChanged += new System.EventHandler(optAutorunNo_CheckedChanged); //add only now the event handler; in this way when loading the UI and set the radio box we dont fire an event
             optAutorunAdmin.CheckedChanged += new System.EventHandler(optAutorunAdmin_CheckedChanged);
             optAutorunUser.CheckedChanged += new System.EventHandler(optAutorunUser_CheckedChanged);
+            optLogNo.CheckedChanged += new System.EventHandler(optLogNo_CheckedChanged);
+            optLogTempDir.CheckedChanged += new System.EventHandler(optLogTempDir_CheckedChanged);
+            optLogAppDir.CheckedChanged += new System.EventHandler(optLogAppDir_CheckedChanged);
         }
 
         private void btnEditOK_Click(object sender, EventArgs e)
@@ -269,7 +278,7 @@ namespace DynamicDnsUpdater
         {
             MouseEventArgs m = (MouseEventArgs)e;
             if (m.Button==MouseButtons.Right)
-                tryIconMenu.Show(Cursor.Position.X,Cursor.Position.Y);
+                trayIconMenu.Show(Cursor.Position.X,Cursor.Position.Y);
         }
 
         private void txtIP_Click(object sender, EventArgs e)
@@ -280,12 +289,6 @@ namespace DynamicDnsUpdater
         private void txtIpResolved_Click(object sender, EventArgs e)
         {
             txtIpResolved.SelectAll();
-        }
-
-        private void chkLog_Click(object sender, EventArgs e)
-        {
-            AppSettings.logEnabled = chkLog.Checked;
-            lblStatus.Text = "Logging enable status: " + chkLog.Checked;
         }
       
         private void optAutorunNo_CheckedChanged(object sender, EventArgs e)
@@ -324,8 +327,8 @@ namespace DynamicDnsUpdater
                     if (File.Exists(programNewExe) == false) //if there is no file is a problem
                         throw new Exception("Can't copy exe to destination");
 
-                    if (File.Exists(currPath + "dduSettings.txt") == true)
-                        File.Copy(currPath + "dduSettings.txt", programNewPath + "dduSettings.txt", true);
+                    if (File.Exists(currPath + AppSettings.settingsFileName) == true)
+                        File.Copy(currPath + AppSettings.settingsFileName, programNewPath + AppSettings.settingsFileName, true);
                     else
                         throw new Exception("Save settings before turning on autorun!");
 
@@ -351,7 +354,7 @@ namespace DynamicDnsUpdater
         {
             if (optAutorunUser.Checked == true)
             {
-                if (File.Exists(utils.GetExePath(false) + "dduSettings.txt")==false)
+                if (File.Exists(utils.GetExePath(false) + AppSettings.settingsFileName) ==false)
                 {
                     optAutorunUser.Checked = false;
                     optAutorunNo.Checked = true;
@@ -374,7 +377,7 @@ namespace DynamicDnsUpdater
         {
             try
             {
-                string logFile = Path.GetTempPath() + "ddu.log";
+                string logFile = Path.GetTempPath() + AppSettings.logFileName;
                 if (File.Exists(logFile) == false)
                 {
                     lblStatus.Text = "Log file doesn't exists";
@@ -392,6 +395,34 @@ namespace DynamicDnsUpdater
             }
             lblStatus.Text = "Log file opened";
         }
-        
+
+        private void optLogNo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (optLogNo.Checked == true)
+            {
+                AppSettings.logEnabled = false;
+                lblStatus.Text = "Logging disabled";
+            }
+        }
+
+        private void optLogAppDir_CheckedChanged(object sender, EventArgs e)
+        {
+            if (optLogAppDir.Checked == true)
+            {
+                AppSettings.logAppDir = true;
+                AppSettings.logEnabled = true;
+                lblStatus.Text = "Logging enabled to application directory";
+            }
+        }
+
+        private void optLogTempDir_CheckedChanged(object sender, EventArgs e)
+        {
+            if (optLogTempDir.Checked == true)
+            {
+                AppSettings.logAppDir = false;
+                AppSettings.logEnabled = true;
+                lblStatus.Text = "Logging enabled to %TEMP% directory";
+            }
+        }
     }
 }

@@ -50,7 +50,6 @@
             this.btnResolveHostname = new System.Windows.Forms.Button();
             this.txtIpResolved = new System.Windows.Forms.TextBox();
             this.txtHostResolve = new System.Windows.Forms.TextBox();
-            this.chkLog = new System.Windows.Forms.CheckBox();
             this.optAutorunUser = new System.Windows.Forms.RadioButton();
             this.optAutorunAdmin = new System.Windows.Forms.RadioButton();
             this.optAutorunNo = new System.Windows.Forms.RadioButton();
@@ -60,20 +59,26 @@
             this.label12 = new System.Windows.Forms.Label();
             this.txtUpdateLink = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.btnOpenLog = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.optLogAppDir = new System.Windows.Forms.RadioButton();
+            this.optLogTempDir = new System.Windows.Forms.RadioButton();
+            this.optLogNo = new System.Windows.Forms.RadioButton();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.tryIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.trayIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnOpenLog = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.tryIconMenu.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.trayIconMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -81,11 +86,11 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.lblStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 315);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 352);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(430, 22);
             this.statusStrip1.SizingGrip = false;
-            this.statusStrip1.TabIndex = 7;
+            this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
@@ -143,10 +148,10 @@
             this.statusImg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.statusImg.Enabled = false;
             this.statusImg.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.statusImg.Location = new System.Drawing.Point(408, 315);
+            this.statusImg.Location = new System.Drawing.Point(408, 352);
             this.statusImg.Name = "statusImg";
             this.statusImg.Size = new System.Drawing.Size(22, 22);
-            this.statusImg.TabIndex = 22;
+            this.statusImg.TabIndex = 0;
             this.statusImg.TabStop = false;
             this.statusImg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.infoTip.SetToolTip(this.statusImg, "Shows if the Dynamic DNS update task is running");
@@ -170,7 +175,7 @@
             this.label1.Location = new System.Drawing.Point(177, 118);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(23, 13);
-            this.label1.TabIndex = 34;
+            this.label1.TabIndex = 0;
             this.label1.Text = "min";
             this.infoTip.SetToolTip(this.label1, "How often the program will try to update your dynamic dns record (in minutes)");
             // 
@@ -250,7 +255,7 @@
             this.label4.Location = new System.Drawing.Point(23, 41);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(56, 13);
-            this.label4.TabIndex = 30;
+            this.label4.TabIndex = 0;
             this.label4.Text = "Password:";
             this.infoTip.SetToolTip(this.label4, "The password that you selected / that has bend send to you by email at the regist" +
         "ration time");
@@ -261,7 +266,7 @@
             this.label3.Location = new System.Drawing.Point(21, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(58, 13);
-            this.label3.TabIndex = 28;
+            this.label3.TabIndex = 0;
             this.label3.Text = "Username:";
             this.infoTip.SetToolTip(this.label3, "The Username that you used when you registered your new account");
             // 
@@ -279,7 +284,7 @@
             // txtIpResolved
             // 
             this.txtIpResolved.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtIpResolved.Location = new System.Drawing.Point(306, 68);
+            this.txtIpResolved.Location = new System.Drawing.Point(308, 68);
             this.txtIpResolved.Name = "txtIpResolved";
             this.txtIpResolved.ReadOnly = true;
             this.txtIpResolved.Size = new System.Drawing.Size(92, 20);
@@ -295,27 +300,13 @@
             this.txtHostResolve.TabIndex = 11;
             this.infoTip.SetToolTip(this.txtHostResolve, "Hostname to be resolved");
             // 
-            // chkLog
-            // 
-            this.chkLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkLog.AutoSize = true;
-            this.chkLog.Location = new System.Drawing.Point(306, 94);
-            this.chkLog.Name = "chkLog";
-            this.chkLog.Size = new System.Drawing.Size(92, 17);
-            this.chkLog.TabIndex = 16;
-            this.chkLog.Text = "Enable log file";
-            this.infoTip.SetToolTip(this.chkLog, "Enable the creation of a logfile; logfile is here: %TEMP%\\ddu.log");
-            this.chkLog.UseVisualStyleBackColor = true;
-            this.chkLog.Click += new System.EventHandler(this.chkLog_Click);
-            // 
             // optAutorunUser
             // 
-            this.optAutorunUser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.optAutorunUser.AutoSize = true;
-            this.optAutorunUser.Location = new System.Drawing.Point(9, 114);
+            this.optAutorunUser.Location = new System.Drawing.Point(51, 16);
             this.optAutorunUser.Name = "optAutorunUser";
             this.optAutorunUser.Size = new System.Drawing.Size(123, 17);
-            this.optAutorunUser.TabIndex = 13;
+            this.optAutorunUser.TabIndex = 18;
             this.optAutorunUser.Text = "On current user login";
             this.infoTip.SetToolTip(this.optAutorunUser, "Autostart the program with windows; no need to be Admin to use this option (runs " +
         "in backbround+log) (expert note: uses hkcu\\...\\run regedit key)");
@@ -323,12 +314,11 @@
             // 
             // optAutorunAdmin
             // 
-            this.optAutorunAdmin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.optAutorunAdmin.AutoSize = true;
-            this.optAutorunAdmin.Location = new System.Drawing.Point(138, 114);
+            this.optAutorunAdmin.Location = new System.Drawing.Point(177, 16);
             this.optAutorunAdmin.Name = "optAutorunAdmin";
             this.optAutorunAdmin.Size = new System.Drawing.Size(107, 17);
-            this.optAutorunAdmin.TabIndex = 14;
+            this.optAutorunAdmin.TabIndex = 19;
             this.optAutorunAdmin.Text = "On windows boot";
             this.infoTip.SetToolTip(this.optAutorunAdmin, "Autostart the program with windows; must run the program as Admin to use this opt" +
         "ion (runs in backbround+log) (expert note: uses task scheduler)");
@@ -336,13 +326,12 @@
             // 
             // optAutorunNo
             // 
-            this.optAutorunNo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.optAutorunNo.AutoSize = true;
             this.optAutorunNo.Checked = true;
-            this.optAutorunNo.Location = new System.Drawing.Point(251, 114);
+            this.optAutorunNo.Location = new System.Drawing.Point(6, 16);
             this.optAutorunNo.Name = "optAutorunNo";
             this.optAutorunNo.Size = new System.Drawing.Size(39, 17);
-            this.optAutorunNo.TabIndex = 15;
+            this.optAutorunNo.TabIndex = 17;
             this.optAutorunNo.TabStop = true;
             this.optAutorunNo.Text = "No";
             this.infoTip.SetToolTip(this.optAutorunNo, "Disable both autorun");
@@ -365,7 +354,7 @@
             this.label10.Location = new System.Drawing.Point(21, 67);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(58, 13);
-            this.label10.TabIndex = 37;
+            this.label10.TabIndex = 0;
             this.label10.Text = "Hostname:";
             this.infoTip.SetToolTip(this.label10, "Hostname to be updated; for example \"something.dedyn.io\"");
             // 
@@ -375,7 +364,7 @@
             this.label11.Location = new System.Drawing.Point(21, 93);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(59, 13);
-            this.label11.TabIndex = 38;
+            this.label11.TabIndex = 0;
             this.label11.Text = "Update url:";
             this.infoTip.SetToolTip(this.label11, "Url that will be visited to update the ddns, the hostname parameter is automatica" +
         "lly added at the end, https is forced");
@@ -386,7 +375,7 @@
             this.label12.Location = new System.Drawing.Point(85, 93);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(43, 13);
-            this.label12.TabIndex = 39;
+            this.label12.TabIndex = 0;
             this.label12.Text = "https://";
             this.infoTip.SetToolTip(this.label12, "HTTPS is forced on");
             // 
@@ -400,7 +389,7 @@
             this.txtUpdateLink.Location = new System.Drawing.Point(126, 90);
             this.txtUpdateLink.Name = "txtUpdateLink";
             this.txtUpdateLink.Size = new System.Drawing.Size(201, 21);
-            this.txtUpdateLink.TabIndex = 40;
+            this.txtUpdateLink.TabIndex = 4;
             this.txtUpdateLink.Text = "update.dedyn.io";
             this.infoTip.SetToolTip(this.txtUpdateLink, "Url that will be visited to update the ddns, the hostname parameter is automatica" +
         "lly added at the end, https is forced");
@@ -412,9 +401,22 @@
             this.label6.Location = new System.Drawing.Point(326, 93);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(74, 13);
-            this.label6.TabIndex = 33;
+            this.label6.TabIndex = 0;
             this.label6.Text = "?hostname=...";
             this.infoTip.SetToolTip(this.label6, "Hostname parameter is automatically added at the end");
+            // 
+            // btnOpenLog
+            // 
+            this.btnOpenLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOpenLog.Enabled = false;
+            this.btnOpenLog.Location = new System.Drawing.Point(302, 8);
+            this.btnOpenLog.Name = "btnOpenLog";
+            this.btnOpenLog.Size = new System.Drawing.Size(75, 27);
+            this.btnOpenLog.TabIndex = 16;
+            this.btnOpenLog.Text = "&View Log";
+            this.infoTip.SetToolTip(this.btnOpenLog, "Opens the logfile if exists");
+            this.btnOpenLog.UseVisualStyleBackColor = true;
+            this.btnOpenLog.Click += new System.EventHandler(this.btnOpenLog_Click);
             // 
             // groupBox1
             // 
@@ -437,20 +439,17 @@
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(406, 150);
-            this.groupBox1.TabIndex = 27;
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Main settings";
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.btnOpenLog);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.optAutorunNo);
-            this.groupBox2.Controls.Add(this.optAutorunAdmin);
-            this.groupBox2.Controls.Add(this.optAutorunUser);
-            this.groupBox2.Controls.Add(this.chkLog);
+            this.groupBox2.Controls.Add(this.groupBox4);
+            this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label2);
@@ -462,20 +461,71 @@
             this.groupBox2.Controls.Add(this.btnUpdateNow);
             this.groupBox2.Location = new System.Drawing.Point(12, 168);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(406, 141);
-            this.groupBox2.TabIndex = 28;
+            this.groupBox2.Size = new System.Drawing.Size(406, 181);
+            this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Utility";
             // 
-            // label9
+            // groupBox4
             // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 98);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(47, 13);
-            this.label9.TabIndex = 39;
-            this.label9.Text = "Autorun:";
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.optAutorunNo);
+            this.groupBox4.Controls.Add(this.optAutorunUser);
+            this.groupBox4.Controls.Add(this.optAutorunAdmin);
+            this.groupBox4.Location = new System.Drawing.Point(6, 136);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(394, 40);
+            this.groupBox4.TabIndex = 17;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Autorun";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.optLogAppDir);
+            this.groupBox3.Controls.Add(this.optLogTempDir);
+            this.groupBox3.Controls.Add(this.btnOpenLog);
+            this.groupBox3.Controls.Add(this.optLogNo);
+            this.groupBox3.Location = new System.Drawing.Point(6, 97);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(394, 37);
+            this.groupBox3.TabIndex = 13;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Log mode";
+            // 
+            // optLogAppDir
+            // 
+            this.optLogAppDir.AutoSize = true;
+            this.optLogAppDir.Location = new System.Drawing.Point(51, 15);
+            this.optLogAppDir.Name = "optLogAppDir";
+            this.optLogAppDir.Size = new System.Drawing.Size(120, 17);
+            this.optLogAppDir.TabIndex = 14;
+            this.optLogAppDir.Text = "Application directory";
+            this.optLogAppDir.UseVisualStyleBackColor = true;
+            // 
+            // optLogTempDir
+            // 
+            this.optLogTempDir.AutoSize = true;
+            this.optLogTempDir.Location = new System.Drawing.Point(177, 15);
+            this.optLogTempDir.Name = "optLogTempDir";
+            this.optLogTempDir.Size = new System.Drawing.Size(95, 17);
+            this.optLogTempDir.TabIndex = 15;
+            this.optLogTempDir.Text = "Temp directory";
+            this.optLogTempDir.UseVisualStyleBackColor = true;
+            // 
+            // optLogNo
+            // 
+            this.optLogNo.AutoSize = true;
+            this.optLogNo.Checked = true;
+            this.optLogNo.Location = new System.Drawing.Point(6, 15);
+            this.optLogNo.Name = "optLogNo";
+            this.optLogNo.Size = new System.Drawing.Size(39, 17);
+            this.optLogNo.TabIndex = 13;
+            this.optLogNo.TabStop = true;
+            this.optLogNo.Text = "No";
+            this.optLogNo.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -483,16 +533,16 @@
             this.label8.Location = new System.Drawing.Point(104, 10);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(42, 13);
-            this.label8.TabIndex = 34;
+            this.label8.TabIndex = 0;
             this.label8.Text = "Your IP";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(306, 52);
+            this.label7.Location = new System.Drawing.Point(305, 52);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(17, 13);
-            this.label7.TabIndex = 33;
+            this.label7.TabIndex = 0;
             this.label7.Text = "IP";
             // 
             // label2
@@ -501,15 +551,15 @@
             this.label2.Location = new System.Drawing.Point(104, 52);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(192, 13);
-            this.label2.TabIndex = 32;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Hostname (example: duckduckgo.com)";
             // 
-            // tryIconMenu
+            // trayIconMenu
             // 
-            this.tryIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trayIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
-            this.tryIconMenu.Name = "tryIconMenu";
-            this.tryIconMenu.Size = new System.Drawing.Size(93, 26);
+            this.trayIconMenu.Name = "tryIconMenu";
+            this.trayIconMenu.Size = new System.Drawing.Size(93, 26);
             // 
             // exitToolStripMenuItem
             // 
@@ -518,23 +568,11 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // btnOpenLog
-            // 
-            this.btnOpenLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenLog.Location = new System.Drawing.Point(306, 112);
-            this.btnOpenLog.Name = "btnOpenLog";
-            this.btnOpenLog.Size = new System.Drawing.Size(75, 23);
-            this.btnOpenLog.TabIndex = 40;
-            this.btnOpenLog.Text = "&View Log";
-            this.infoTip.SetToolTip(this.btnOpenLog, "Opens the logfile if exists");
-            this.btnOpenLog.UseVisualStyleBackColor = true;
-            this.btnOpenLog.Click += new System.EventHandler(this.btnOpenLog_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(430, 337);
+            this.ClientSize = new System.Drawing.Size(430, 374);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.statusImg);
@@ -554,7 +592,11 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.tryIconMenu.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.trayIconMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -584,22 +626,25 @@
         private System.Windows.Forms.TextBox txtHostResolve;
         private System.Windows.Forms.Button btnResolveHostname;
         private System.Windows.Forms.TextBox txtIpResolved;
-        private System.Windows.Forms.ContextMenuStrip tryIconMenu;
+        private System.Windows.Forms.ContextMenuStrip trayIconMenu;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox chkLog;
         private System.Windows.Forms.RadioButton optAutorunNo;
         private System.Windows.Forms.RadioButton optAutorunAdmin;
         private System.Windows.Forms.RadioButton optAutorunUser;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txtHostname;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox txtUpdateLink;
         private System.Windows.Forms.Button btnOpenLog;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.RadioButton optLogAppDir;
+        private System.Windows.Forms.RadioButton optLogTempDir;
+        private System.Windows.Forms.RadioButton optLogNo;
+        private System.Windows.Forms.GroupBox groupBox4;
     }
 }
 
