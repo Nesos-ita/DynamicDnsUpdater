@@ -107,28 +107,34 @@ namespace DynamicDnsUpdater
         {
             if (AppSettings.logEnabled == true)
             {
-                if (streamLog == null)
-                    InitLog();
-                if (streamLogLocal==null)
-                    InitLogLocal();
-                if (streamLog != null)
+                if (AppSettings.logAppDir == true)
                 {
-                    try
+                    if (streamLogLocal == null)
+                        InitLogLocal();
+                    if (streamLogLocal != null)
                     {
-                        DateTime t = DateTime.Now;
-                        //string ora = t.Day.ToString().PadLeft(2, '0') + "-" + t.Month.ToString().PadLeft(2, '0') + "-" + t.Year.ToString().PadLeft(4, '0') + "," + t.Hour.ToString().PadLeft(2, '0') + "-" + t.Minute.ToString().PadLeft(2, '0') + "-" + t.Second.ToString().PadLeft(2, '0') + " - ";
-                        streamLog.WriteLine(t.ToString() + " - " + str);
+                        try
+                        {
+                            DateTime t = DateTime.Now;
+                            streamLogLocal.WriteLine(t.ToString() + " - " + str);
+                        }
+                        catch (Exception) { }
                     }
-                    catch (Exception) { }
                 }
-                if (streamLogLocal != null)
+                else
                 {
-                    try
+                    if (streamLog == null)
+                        InitLog();
+                    if (streamLog != null)
                     {
-                        DateTime t = DateTime.Now;
-                        streamLogLocal.WriteLine(t.ToString() + " - " + str);
+                        try
+                        {
+                            DateTime t = DateTime.Now;
+                            //string ora = t.Day.ToString().PadLeft(2, '0') + "-" + t.Month.ToString().PadLeft(2, '0') + "-" + t.Year.ToString().PadLeft(4, '0') + "," + t.Hour.ToString().PadLeft(2, '0') + "-" + t.Minute.ToString().PadLeft(2, '0') + "-" + t.Second.ToString().PadLeft(2, '0') + " - ";
+                            streamLog.WriteLine(t.ToString() + " - " + str);
+                        }
+                        catch (Exception) { }
                     }
-                    catch (Exception) { }
                 }
             }
         }
