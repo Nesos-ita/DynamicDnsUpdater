@@ -1,7 +1,8 @@
 # DynamicDnsUpdater
-Allows you to keep updated the Dynamic DNS easily
+Allows you to keep updated the Dynamic DNS easily  
+![screenshot](screenshot.png)  
 
-## How to use:  
+## How to use and configure:  
 * Download the program under "Compiled Binary\DynamicDnsUpdater.exe"  
 * Optional but suggested: Check the digital signature ([Here](https://www.qubes-os.org/doc/verifying-signatures/) you can find more info about digital signatures and why they are important.)  
 * Open and follow on screen instructions  (fill data and click ok)
@@ -12,8 +13,9 @@ Allows you to keep updated the Dynamic DNS easily
 -hostname field: fill with your hostname (same as username field)  
 -update url: is yet correct, no need to edit  
 -delay: i think that every 60 minutes is a good option (delay between 1 min - 24 hours)  
+That is all what you need to do!
 
-If for some reason you don't have .NET framework 3.0 (but seems that is installed by default on every pc) you should be able to download it from here:  
+If for some reason you don't have .NET framework 3.0 you should be able to download it from here:  
 [.NET 3.0 (64bit)](http://go.microsoft.com/fwlink/?LinkId=98106)  
 [.NET 3.0 (32bit)](http://download.microsoft.com/download/8/F/E/8FEEE89D-9E4F-4BA3-993E-0FFEA8E21E1B/NetFx30SP1_x86.exe)  
 
