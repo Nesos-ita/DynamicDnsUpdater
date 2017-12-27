@@ -37,11 +37,12 @@ Log options given from command line are not saved and do not persist if you reop
 You should not set more than one log option, if you do, only the first option received will be used  
 Inside the file you can find useful informations about the update result history (aka if the program is working correctly).  
 After the update an entry like this should be logged: `Updating DNS: OK`  
+Note that background mode never exit, so ensure that you have a working configuration before using it.  
 possible vlaues are:  
 
 |Reported status| Reason|Will stop updater in GUI mode
 |---|---|---
-|OK|DDNS updated succesfully|no
+|OK|DDNS updated succesfully (doesn't matter if the ip changed or not)|no
 |NotConnected| you are not connected, there is a nework problem, a firewall is blocking access|no
 |Firewalled|resolved dns update link to ip but can't connect to that ip, usually firewall but can be network problem or disconnected.|no
 |UserNotFound|connected to the ddns provider but the server report(404) that user doesn't exist|yes
