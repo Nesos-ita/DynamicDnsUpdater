@@ -1,9 +1,9 @@
 # DynamicDnsUpdater
 ***Allows you to keep updated the Dynamic DNS easily***  
-![screenshot](Documentation\screenshot.png)  
+![screenshot](Documentation/screenshot.png)  
 ## How to use and configure:  
-1.  Download the program under [Compiled Binary\DynamicDnsUpdater.exe](Compiled Binary\DynamicDnsUpdater.exe)  
-2. Optional but suggested: Check the digital signature using [my public key](Documentation\Nesos code signing public key.asc). (You can find more informations about digital signatures and why they are important [here](https://www.qubes-os.org/doc/verifying-signatures/))  
+1.  Download the program under [Compiled Binary/DynamicDnsUpdater.exe](Compiled Binary/DynamicDnsUpdater.exe)  
+2. Optional but suggested: Check the digital signature using [my public key](Documentation/Nesos code signing public key.asc). (You can find more informations about digital signatures and why they are important [here](https://www.qubes-os.org/doc/verifying-signatures/))  
 3. Open and follow on screen instructions  (fill data and click ok)
 
 ##For [deSEC](https://desec.io/#!/en/) users:  
@@ -25,7 +25,7 @@ Let me know if you find any bug by reporting them
 Also report feature requests  
 
 For more complete and detailed informations check:  
-**[FAQ](Documentation\FAQ.md)**  
-**[Security FAQ](Documentation\Security FAQ.md)**  
-**[File format specifications](Documentation\File format specifications.md)**  
-**[Version history](Documentation\Version history.md)**  
+**[FAQ](Documentation/FAQ.md)**  
+**[Security FAQ](Documentation/Security FAQ.md)**  
+**[File format specifications](Documentation/File format specifications.md)**  
+**[Version history](Documentation/Version history.md)**  
