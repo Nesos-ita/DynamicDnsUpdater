@@ -414,7 +414,7 @@
             this.btnOpenLog.Size = new System.Drawing.Size(75, 27);
             this.btnOpenLog.TabIndex = 16;
             this.btnOpenLog.Text = "&View Log";
-            this.infoTip.SetToolTip(this.btnOpenLog, "Opens the logfile if exists");
+            this.infoTip.SetToolTip(this.btnOpenLog, "Opens the selected logfile if exists");
             this.btnOpenLog.UseVisualStyleBackColor = true;
             this.btnOpenLog.Click += new System.EventHandler(this.btnOpenLog_Click);
             // 
@@ -503,6 +503,7 @@
             this.optLogAppDir.Size = new System.Drawing.Size(120, 17);
             this.optLogAppDir.TabIndex = 14;
             this.optLogAppDir.Text = "Application directory";
+            this.infoTip.SetToolTip(this.optLogAppDir, "Enable logging where you have placed the program");
             this.optLogAppDir.UseVisualStyleBackColor = true;
             // 
             // optLogTempDir
@@ -513,6 +514,7 @@
             this.optLogTempDir.Size = new System.Drawing.Size(95, 17);
             this.optLogTempDir.TabIndex = 15;
             this.optLogTempDir.Text = "Temp directory";
+            this.infoTip.SetToolTip(this.optLogTempDir, "Enable logging to the %TEMP% directory");
             this.optLogTempDir.UseVisualStyleBackColor = true;
             // 
             // optLogNo
@@ -525,6 +527,7 @@
             this.optLogNo.TabIndex = 13;
             this.optLogNo.TabStop = true;
             this.optLogNo.Text = "No";
+            this.infoTip.SetToolTip(this.optLogNo, "Disable logging");
             this.optLogNo.UseVisualStyleBackColor = true;
             // 
             // label8

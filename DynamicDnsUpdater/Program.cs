@@ -22,12 +22,27 @@ namespace DynamicDnsUpdater
 
                 switch (arglow)
                 {
+                    case "-nolog":
+                        if (AppSettings.overrideLogOption == false)
+                        {
+                            AppSettings.logSetting = AppSettings.logSettingEnum.noLog;
+                            AppSettings.overrideLogOption = true;
+                        }
+                        break;
                     case "-log":
-                        AppSettings.logEnabled = true;
+                    case "-logtemp":
+                        if (AppSettings.overrideLogOption == false)
+                        {
+                            AppSettings.logSetting = AppSettings.logSettingEnum.logTemp;
+                            AppSettings.overrideLogOption = true;
+                        }
                         break;
                     case "-loghere":
-                        AppSettings.logAppDir = true;
-                        AppSettings.logEnabled = true;                        
+                        if (AppSettings.overrideLogOption == false)
+                        {
+                            AppSettings.logSetting = AppSettings.logSettingEnum.logHere;
+                            AppSettings.overrideLogOption = true;
+                        }
                         break;
                     case "-bg":
                         backGroundMode = true;//runs in background mode (do not start the form)
@@ -43,7 +58,15 @@ namespace DynamicDnsUpdater
                 }
             }
             if (help == true) //showed only once
-                MessageBox.Show("-help\tShow this message\n-log\tEnable Logging to file %TEMP%\\"+ AppSettings.logFileName + "\n-loghere\tEnable Logging to file in application directory\n-bg\tStarts in background mode (no GUI)", "Available commands:");
+                MessageBox.Show(
+                    "-help\tShow this message\n"+
+                    "Note: if you specify a log option the corresponding file setting is ignored;\nlog setting in file is not changed\n" +
+                    "-NoLog\tDisable log\n"+
+                    "-LogTemp\tEnable logging to file %TEMP%\\" + AppSettings.logFileName + "\n"+
+                    "-LogHere\tEnable logging to file in application directory\n"+
+                    "-bg\tStarts in background mode (no GUI)"
+
+                    , "Available commands (case insensitive):");
             return continueRunProgram;
         }
 
@@ -62,10 +85,9 @@ namespace DynamicDnsUpdater
             if (args.Length != 0)
                 if (ParseCmdLine(args) == false)
                     return;
-            utils.AddLog("Process started, version: " + Application.ProductVersion);
             if (utils.ReadSettings() == true)
                 AppSettings.firstRun = false;
-
+            utils.AddLog("Version: " + Application.ProductVersion);//here because if we log or not is readfrom file (or commandline)
             if (backGroundMode == true)
             {
                 utils.AddLog("Background mode");

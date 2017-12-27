@@ -12,8 +12,8 @@ namespace DynamicDnsUpdater
 {
     class utilityFunctions
     {
-        StreamWriter streamLog = null;
-        StreamWriter streamLogLocal = null;
+        static StreamWriter streamLog = null;
+        static StreamWriter streamLogLocal = null;
         struct timerWait
         {
             public DateTime myTime;
@@ -105,38 +105,35 @@ namespace DynamicDnsUpdater
         /// <param name="str">message to be logged</param>
         public void AddLog(string str)
         {
-            if (AppSettings.logEnabled == true)
+            if (AppSettings.logSetting==AppSettings.logSettingEnum.logHere)
             {
-                if (AppSettings.logAppDir == true)
+                if (streamLogLocal == null)
+                    InitLogLocal();
+                if (streamLogLocal != null)
                 {
-                    if (streamLogLocal == null)
-                        InitLogLocal();
-                    if (streamLogLocal != null)
+                    try
                     {
-                        try
-                        {
-                            DateTime t = DateTime.Now;
-                            streamLogLocal.WriteLine(t.ToString() + " - " + str);
-                        }
-                        catch (Exception) { }
+                        DateTime t = DateTime.Now;
+                        streamLogLocal.WriteLine(t.ToString() + " - " + str);
                     }
-                }
-                else
-                {
-                    if (streamLog == null)
-                        InitLog();
-                    if (streamLog != null)
-                    {
-                        try
-                        {
-                            DateTime t = DateTime.Now;
-                            //string ora = t.Day.ToString().PadLeft(2, '0') + "-" + t.Month.ToString().PadLeft(2, '0') + "-" + t.Year.ToString().PadLeft(4, '0') + "," + t.Hour.ToString().PadLeft(2, '0') + "-" + t.Minute.ToString().PadLeft(2, '0') + "-" + t.Second.ToString().PadLeft(2, '0') + " - ";
-                            streamLog.WriteLine(t.ToString() + " - " + str);
-                        }
-                        catch (Exception) { }
-                    }
+                    catch (Exception) { }
                 }
             }
+            if (AppSettings.logSetting == AppSettings.logSettingEnum.logTemp)
+            {
+                if (streamLog == null)
+                    InitLog();
+                if (streamLog != null)
+                {
+                    try
+                    {
+                        DateTime t = DateTime.Now;
+                        //string ora = t.Day.ToString().PadLeft(2, '0') + "-" + t.Month.ToString().PadLeft(2, '0') + "-" + t.Year.ToString().PadLeft(4, '0') + "," + t.Hour.ToString().PadLeft(2, '0') + "-" + t.Minute.ToString().PadLeft(2, '0') + "-" + t.Second.ToString().PadLeft(2, '0') + " - ";
+                        streamLog.WriteLine(t.ToString() + " - " + str);
+                    }
+                    catch (Exception) { }
+                }
+            }            
         }
 
         /// <summary>
@@ -480,21 +477,44 @@ namespace DynamicDnsUpdater
                     string password = reader.ReadLine();
                     string hostname = reader.ReadLine();
                     string updateLink = reader.ReadLine();
-                    if (reader.EndOfStream == true)
-                        throw new Exception("Incorrect file format, too short");
                     uint updateInterval = Convert.ToUInt32(reader.ReadLine());
                     if (updateInterval < 1)
                         updateInterval = 1;
                     if (updateInterval > 1440)
                         updateInterval = 1440; //fix min & max
+
+                    string logOption = "nolog";
+                    if (reader.EndOfStream == false)//compatibility with older version (where there wasn't log setting)
+                        logOption = reader.ReadLine().ToLower();
                     if (reader.EndOfStream == false)
                         throw new Exception("Incorrect file format, too long");
                     reader.Close(); //if we reach this point settings has been sucesfully read
+
+                    AppSettings.logSettingEnum tempLogStatus = AppSettings.logSettingEnum.noLog;
+                    switch (logOption)
+                    {
+                        case "nolog":
+                            //nolog is default
+                            break;
+                        case "loghere":
+                            tempLogStatus = AppSettings.logSettingEnum.logHere;
+                            break;
+                        case "logtemp":
+                        case "log":
+                            tempLogStatus = AppSettings.logSettingEnum.logTemp;
+                            break;
+                        default:
+                            throw new Exception("Incorrect file format, unknown log option");
+                    }
+                    //---change setting only now that we know they are valid---
                     AppSettings.user = user; //apply settings
                     AppSettings.password = password;
                     AppSettings.hostname = hostname;
                     AppSettings.updateLink = updateLink;
                     AppSettings.updateInterval = updateInterval;
+                    AppSettings.originalLogSetting = tempLogStatus;
+                    if (AppSettings.overrideLogOption == false)//log option from cmdline, don't use file settings
+                        AppSettings.logSetting = tempLogStatus;
                     AppSettings.firstRun = false;
                     AddLog("Settings read OK");
                     return true;
@@ -523,6 +543,10 @@ namespace DynamicDnsUpdater
                 writer.WriteLine(AppSettings.hostname);
                 writer.WriteLine(AppSettings.updateLink);
                 writer.WriteLine(AppSettings.updateInterval.ToString());
+                if (AppSettings.overrideLogOption==false)
+                    writer.WriteLine(AppSettings.logSetting.ToString());//devo scrivere l'originale
+                else
+                    writer.WriteLine(AppSettings.originalLogSetting.ToString());
                 writer.Close();
                 AddLog("Settings saved OK");
                 return true;

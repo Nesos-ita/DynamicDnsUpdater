@@ -30,8 +30,8 @@ namespace DynamicDnsUpdater
             updaterThread.Start();
             statusImg.BackColor = ColorTranslator.FromHtml("#5AFF5A"); //green
             statusImg.Checked = true;
-            lblStatus.Text = "Running";            
-            utils.AddLog("Running");
+            lblStatus.Text = "DDNS upadater running";            
+            utils.AddLog("DDNS upadater running");
         }
 
         void StopUpdateTask()
@@ -47,8 +47,8 @@ namespace DynamicDnsUpdater
             updaterThread = null;
             statusImg.BackColor = ColorTranslator.FromHtml("#FF5A5A"); //red
             statusImg.Checked = false;
-            lblStatus.Text = "Stopped";
-            utils.AddLog("Stopped");
+            lblStatus.Text = "DDNS upadater stopped";
+            utils.AddLog("DDNS upadater stopped");
         }
 
         void StatusUpdaterTask()
@@ -135,14 +135,26 @@ namespace DynamicDnsUpdater
         {
             optAutorunUser.Checked = utils.TaskExist(true);
             optAutorunAdmin.Checked = utils.TaskExist(false);
-            if (AppSettings.logEnabled)
+            if (AppSettings.overrideLogOption==true)//log options can be indipendent from the file, always fix here
             {
-                optLogNo.Checked = false;
-                btnOpenLog.Enabled = true;
-                if (AppSettings.logAppDir)
-                    optLogAppDir.Checked = true;
-                else
+                optLogNo.Enabled = false;
+                optLogTempDir.Enabled = false;
+                optLogAppDir.Enabled = false;
+            }
+            switch (AppSettings.logSetting)
+            {
+                case AppSettings.logSettingEnum.noLog:
+                    break;
+                case AppSettings.logSettingEnum.logTemp:
+                    optLogNo.Checked = false;
                     optLogTempDir.Checked = true;
+                    btnOpenLog.Enabled = true;
+                    break;
+                case AppSettings.logSettingEnum.logHere:
+                    optLogNo.Checked = false;
+                    optLogAppDir.Checked = true;
+                    btnOpenLog.Enabled = true;
+                    break;
             }
             if (utils.IsUserAdmin() == false)
                 optAutorunAdmin.Enabled = false;
@@ -155,7 +167,7 @@ namespace DynamicDnsUpdater
                 lblStatus.Text = "That (red) square shows if the Dynamic DNS updater task is running";
                 utils.AddLog("First run mode (no settings file or can't open)");                
             }
-            else
+            else //we have a file, fix the gui
             {
                 txtUser.Text = AppSettings.user;
                 txtPassword.Text = AppSettings.password;
@@ -189,7 +201,7 @@ namespace DynamicDnsUpdater
                 AppSettings.updateLink = txtUpdateLink.Text;
                 AppSettings.updateInterval = Convert.ToUInt32(numInterval.Value);
                 if (utils.SaveSettings() == false) //save new settings to file
-                    MessageBox.Show("Error saving settings", "Problem", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error saving settings\nCheck log (if enabled) for more informations", "Problem", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 StartUpdateTask(); //start task
                 EditOKMode(false); //change apparence
             }
@@ -335,7 +347,7 @@ namespace DynamicDnsUpdater
                     else
                         throw new Exception("Save settings before turning on autorun!");
 
-                    bool result = utils.AddTask(false, spath, "-bg -log");
+                    bool result = utils.AddTask(false, spath, "-bg");
                     if (result == true)
                     {
                         utils.DeleteTask(true); //if add admin task (try to) remove the user one
@@ -366,7 +378,7 @@ namespace DynamicDnsUpdater
                 }
                 string path = utils.GetSanitizedExePath(true);
                 MessageBox.Show("Keep in mind that if you move, rename or delete the program the autorun function will stop work.\nProgram now is here:\n" + path + "\n\nWhy this?\nSo you can place the program where you want and you don't need admin privileges.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                bool result = utils.AddTask(true, path, "-bg -log");
+                bool result = utils.AddTask(true, path, "-bg");
                 if (result == true)
                 {
                     utils.DeleteTask(false); //if add user task (try to) remove the admin one
@@ -378,33 +390,51 @@ namespace DynamicDnsUpdater
 
         private void btnOpenLog_Click(object sender, EventArgs e)
         {
+            string whichLog = "";
             try
             {
-                string logFile = Path.GetTempPath() + AppSettings.logFileName;
+                string logFile = "";                
+                switch (AppSettings.logSetting)
+                {
+                    case AppSettings.logSettingEnum.logTemp:
+                        whichLog = "%TEMP%";
+                        logFile = Path.GetTempPath() + AppSettings.logFileName;
+                        break;
+                    case AppSettings.logSettingEnum.logHere:
+                        whichLog = "Application directory";
+                        logFile = utils.GetExePath() + AppSettings.logFileName;
+                        break;
+                    default:
+                        throw new NotImplementedException("Unknown log option");
+                }
                 if (File.Exists(logFile) == false)
                 {
-                    lblStatus.Text = "Log file doesn't exists";
+                    lblStatus.Text = "Log file doesn't exists (" + whichLog + ")";
                     return;
                 }
                 Process p = new Process();
                 p.StartInfo.FileName = @"C:\windows\system32\notepad.exe";
                 p.StartInfo.Arguments = logFile;
                 p.Start();
+
             }
             catch (Exception ex)
             {
                 lblStatus.Text = "Open log file error";
                 MessageBox.Show("Error: " + ex.Message, "Problem", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            lblStatus.Text = "Log file opened";
+            lblStatus.Text = "Log file opened (" + whichLog + ")";
         }
 
         private void optLogNo_CheckedChanged(object sender, EventArgs e)
         {
             if (optLogNo.Checked == true)
             {
-                AppSettings.logEnabled = false;
+                AppSettings.logSetting = AppSettings.logSettingEnum.noLog;
+                btnOpenLog.Enabled = false;
                 lblStatus.Text = "Logging disabled";
+                if (utils.SaveSettings() == false) //save new settings to file
+                    MessageBox.Show("Error saving settings\nCheck log (if enabled) for more informations", "Problem", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -412,9 +442,11 @@ namespace DynamicDnsUpdater
         {
             if (optLogAppDir.Checked == true)
             {
-                AppSettings.logAppDir = true;
-                AppSettings.logEnabled = true;
+                AppSettings.logSetting = AppSettings.logSettingEnum.logHere;
+                btnOpenLog.Enabled = true;
                 lblStatus.Text = "Logging enabled to application directory";
+                if (utils.SaveSettings() == false) //save new settings to file
+                    MessageBox.Show("Error saving settings\nCheck log (if enabled) for more informations", "Problem", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -422,9 +454,11 @@ namespace DynamicDnsUpdater
         {
             if (optLogTempDir.Checked == true)
             {
-                AppSettings.logAppDir = false;
-                AppSettings.logEnabled = true;
+                AppSettings.logSetting = AppSettings.logSettingEnum.logTemp;
+                btnOpenLog.Enabled = true;
                 lblStatus.Text = "Logging enabled to %TEMP% directory";
+                if (utils.SaveSettings() == false) //save new settings to file
+                    MessageBox.Show("Error saving settings\nCheck log (if enabled) for more informations", "Problem", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
