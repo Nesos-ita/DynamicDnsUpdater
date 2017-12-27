@@ -1,7 +1,7 @@
 # Version history
 Current version: 1.0.2.22305  
 ## How to read version
-You can find the version in the log or in the file property like this: MAJOR.MINOR.PATCH.BUILD\_ID
+You can find the version in the log or in the file property like this: `MAJOR.MINOR.PATCH.BUILD_ID`
 where:  
 *MAJOR* version with backwards incompatible changes  
 *MINOR* version with new functionality in a backwards-compatible manner  

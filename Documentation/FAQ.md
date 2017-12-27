@@ -30,9 +30,9 @@ If you are interested in how it works:
 ### What is the log option and what does it log?
 I respect your privacy and i don't collect anything from you!! NEVER!  
 Log option can be activated via GUI or by command line.  
-"-LogTemp" creates a log file in %TEMP%\ddu.log where %temp% is a variable that point to _current_ user temp directory (so if you auto run on boot probably c:\windows\temp, dont get tricked).  
-If you set the option "-LogHere" the log will be created where the program is stored.  
-"-NoLog" disable logging.  
+`-LogTemp` creates a log file in %TEMP%\ddu.log where %temp% is a variable that point to _current_ user temp directory (so if you auto run on boot probably c:\windows\temp, dont get tricked).  
+`-LogHere` creates a log file where the program is stored.  
+`-NoLog` disable logging.  
 Log options given from command line are not saved and do not persist if you reopen the program, while if you set them from gui they are saved and used also if you open the program in background mode.  
 You should not set more than one log option, if you do, only the first option received will be used  
 Inside the file you can find useful informations about the update result history (aka if the program is working correctly).

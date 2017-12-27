@@ -2,11 +2,11 @@
 ***Allows you to keep updated the Dynamic DNS easily***  
 ![screenshot](Documentation/screenshot.png)  
 ## How to use and configure:  
-1.  Download the program under [Compiled Binary/DynamicDnsUpdater.exe](Compiled%20Binary/DynamicDnsUpdater.exe)  
+1.  Download the program under [Compiled Binary/DynamicDnsUpdater.exe](https://github.com/Nesos-ita/DynamicDnsUpdater/raw/master/Compiled%20Binary/DynamicDnsUpdater.exe)  
 2. Optional but suggested: Check the digital signature using [my public key](Documentation/Nesos%20code%20signing%20public%20key.asc). (You can find more informations about digital signatures and why they are important [here](https://www.qubes-os.org/doc/verifying-signatures/))  
 3. Open and follow on screen instructions  (fill data and click ok)
 
-##For [deSEC](https://desec.io/#!/en/) users:  
+## For [deSEC](https://desec.io/#!/en/) users:  
 - username field: fill with your hostname (example: something.dedyn.io)  
 - password field: fill with your password (you should have received it by email)  
 - hostname field: fill with your hostname (same as username field)  
