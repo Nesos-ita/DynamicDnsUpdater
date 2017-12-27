@@ -35,8 +35,20 @@ Log option can be activated via GUI or by command line.
 `-NoLog` disable logging.  
 Log options given from command line are not saved and do not persist if you reopen the program, while if you set them from gui they are saved and used also if you open the program in background mode.  
 You should not set more than one log option, if you do, only the first option received will be used  
-Inside the file you can find useful informations about the update result history (aka if the program is working correctly).
+Inside the file you can find useful informations about the update result history (aka if the program is working correctly).  
+After the update an entry like this should be logged: `Updating DNS: OK`  
+possible vlaues are:  
 
+|Reported status| Reason|Will stop updater in GUI mode
+|---|---|---
+|OK|DDNS updated succesfully|no
+|NotConnected| you are not connected, there is a nework problem, a firewall is blocking access|no
+|Firewalled|resolved dns update link to ip but can't connect to that ip, usually firewall but can be network problem or disconnected.|no
+|UserNotFound|connected to the ddns provider but the server report(404) that user doesn't exist|yes
+|Unauthorized|connected to the ddns provider but the server report(401) that password (or user) is wrong|yes
+|UpdateFailed|connected to the ddns provider but the server returned an unexpected answer or no answer at all|yes
+|InvalidUpdateLink|Bad link format / not a link|yes
+|UnknownError|Unknown error, check the log for more informations|yes
 ### Why the password is stored in plaintext in settings file?
 Because is the safest way and there is no other way than this; check the [security FAQ](Security%20FAQ.md) for more deails.
 
