@@ -6,6 +6,8 @@
 *.user
 *.userosscache
 *.sln.docstates
+Compiled Binary/dduSettings.txt
+Compiled Binary/ddu.log
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
