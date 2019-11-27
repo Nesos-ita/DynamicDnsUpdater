@@ -60,13 +60,14 @@
             this.txtUpdateLink = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.btnOpenLog = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.optLogAppDir = new System.Windows.Forms.RadioButton();
             this.optLogTempDir = new System.Windows.Forms.RadioButton();
             this.optLogNo = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkUpdateOnLocalIPChange = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -125,7 +126,7 @@
             this.btnGetIP.Location = new System.Drawing.Point(6, 22);
             this.btnGetIP.Name = "btnGetIP";
             this.btnGetIP.Size = new System.Drawing.Size(92, 27);
-            this.btnGetIP.TabIndex = 7;
+            this.btnGetIP.TabIndex = 8;
             this.btnGetIP.Text = "&Get Current IP";
             this.infoTip.SetToolTip(this.btnGetIP, "Obtains your IP address in case you need it");
             this.btnGetIP.UseVisualStyleBackColor = true;
@@ -137,7 +138,7 @@
             this.txtIP.Name = "txtIP";
             this.txtIP.ReadOnly = true;
             this.txtIP.Size = new System.Drawing.Size(92, 20);
-            this.txtIP.TabIndex = 8;
+            this.txtIP.TabIndex = 9;
             this.infoTip.SetToolTip(this.txtIP, "Here you can find your IP address if you requested it");
             this.txtIP.Click += new System.EventHandler(this.txtIP_Click);
             // 
@@ -163,7 +164,7 @@
             this.btnUpdateNow.Location = new System.Drawing.Point(221, 22);
             this.btnUpdateNow.Name = "btnUpdateNow";
             this.btnUpdateNow.Size = new System.Drawing.Size(177, 27);
-            this.btnUpdateNow.TabIndex = 9;
+            this.btnUpdateNow.TabIndex = 10;
             this.btnUpdateNow.Text = "&Manually update now your ddns";
             this.infoTip.SetToolTip(this.btnUpdateNow, "Force an update now using the above settings");
             this.btnUpdateNow.UseVisualStyleBackColor = true;
@@ -185,7 +186,7 @@
             this.btnEditOK.Location = new System.Drawing.Point(322, 116);
             this.btnEditOK.Name = "btnEditOK";
             this.btnEditOK.Size = new System.Drawing.Size(78, 27);
-            this.btnEditOK.TabIndex = 6;
+            this.btnEditOK.TabIndex = 7;
             this.btnEditOK.Text = "&Edit";
             this.infoTip.SetToolTip(this.btnEditOK, "Saves settings and (re)starts the updater OR stops the updater and edit settings");
             this.btnEditOK.UseVisualStyleBackColor = true;
@@ -245,7 +246,7 @@
             this.label5.Location = new System.Drawing.Point(6, 118);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(73, 13);
-            this.label5.TabIndex = 32;
+            this.label5.TabIndex = 0;
             this.label5.Text = "Update delay:";
             this.infoTip.SetToolTip(this.label5, "How often the program will try to update your dynamic dns record (in minutes)");
             // 
@@ -275,7 +276,7 @@
             this.btnResolveHostname.Location = new System.Drawing.Point(6, 64);
             this.btnResolveHostname.Name = "btnResolveHostname";
             this.btnResolveHostname.Size = new System.Drawing.Size(92, 27);
-            this.btnResolveHostname.TabIndex = 10;
+            this.btnResolveHostname.TabIndex = 11;
             this.btnResolveHostname.Text = "&Resolve";
             this.infoTip.SetToolTip(this.btnResolveHostname, "Uses your system dns to resolve a hostname in case you need it");
             this.btnResolveHostname.UseVisualStyleBackColor = true;
@@ -288,7 +289,7 @@
             this.txtIpResolved.Name = "txtIpResolved";
             this.txtIpResolved.ReadOnly = true;
             this.txtIpResolved.Size = new System.Drawing.Size(92, 20);
-            this.txtIpResolved.TabIndex = 12;
+            this.txtIpResolved.TabIndex = 13;
             this.infoTip.SetToolTip(this.txtIpResolved, "Here you can find the resolved IP address");
             this.txtIpResolved.Click += new System.EventHandler(this.txtIpResolved_Click);
             // 
@@ -297,7 +298,7 @@
             this.txtHostResolve.Location = new System.Drawing.Point(104, 68);
             this.txtHostResolve.Name = "txtHostResolve";
             this.txtHostResolve.Size = new System.Drawing.Size(196, 20);
-            this.txtHostResolve.TabIndex = 11;
+            this.txtHostResolve.TabIndex = 12;
             this.infoTip.SetToolTip(this.txtHostResolve, "Hostname to be resolved");
             // 
             // optAutorunUser
@@ -306,7 +307,7 @@
             this.optAutorunUser.Location = new System.Drawing.Point(51, 16);
             this.optAutorunUser.Name = "optAutorunUser";
             this.optAutorunUser.Size = new System.Drawing.Size(123, 17);
-            this.optAutorunUser.TabIndex = 18;
+            this.optAutorunUser.TabIndex = 19;
             this.optAutorunUser.Text = "On current user login";
             this.infoTip.SetToolTip(this.optAutorunUser, "Autostart the program with windows; no need to be Admin to use this option (runs " +
         "in backbround+log) (expert note: uses hkcu\\...\\run regedit key)");
@@ -318,7 +319,7 @@
             this.optAutorunAdmin.Location = new System.Drawing.Point(177, 16);
             this.optAutorunAdmin.Name = "optAutorunAdmin";
             this.optAutorunAdmin.Size = new System.Drawing.Size(107, 17);
-            this.optAutorunAdmin.TabIndex = 19;
+            this.optAutorunAdmin.TabIndex = 20;
             this.optAutorunAdmin.Text = "On windows boot";
             this.infoTip.SetToolTip(this.optAutorunAdmin, "Autostart the program with windows; must run the program as Admin to use this opt" +
         "ion (runs in backbround+log) (expert note: uses task scheduler)");
@@ -331,7 +332,7 @@
             this.optAutorunNo.Location = new System.Drawing.Point(6, 16);
             this.optAutorunNo.Name = "optAutorunNo";
             this.optAutorunNo.Size = new System.Drawing.Size(39, 17);
-            this.optAutorunNo.TabIndex = 17;
+            this.optAutorunNo.TabIndex = 18;
             this.optAutorunNo.TabStop = true;
             this.optAutorunNo.Text = "No";
             this.infoTip.SetToolTip(this.optAutorunNo, "Disable both autorun");
@@ -412,16 +413,52 @@
             this.btnOpenLog.Location = new System.Drawing.Point(302, 8);
             this.btnOpenLog.Name = "btnOpenLog";
             this.btnOpenLog.Size = new System.Drawing.Size(75, 27);
-            this.btnOpenLog.TabIndex = 16;
+            this.btnOpenLog.TabIndex = 17;
             this.btnOpenLog.Text = "&View Log";
             this.infoTip.SetToolTip(this.btnOpenLog, "Opens the selected logfile if exists");
             this.btnOpenLog.UseVisualStyleBackColor = true;
             this.btnOpenLog.Click += new System.EventHandler(this.btnOpenLog_Click);
             // 
+            // optLogAppDir
+            // 
+            this.optLogAppDir.AutoSize = true;
+            this.optLogAppDir.Location = new System.Drawing.Point(51, 15);
+            this.optLogAppDir.Name = "optLogAppDir";
+            this.optLogAppDir.Size = new System.Drawing.Size(120, 17);
+            this.optLogAppDir.TabIndex = 15;
+            this.optLogAppDir.Text = "Application directory";
+            this.infoTip.SetToolTip(this.optLogAppDir, "Enable logging where you have placed the program");
+            this.optLogAppDir.UseVisualStyleBackColor = true;
+            // 
+            // optLogTempDir
+            // 
+            this.optLogTempDir.AutoSize = true;
+            this.optLogTempDir.Location = new System.Drawing.Point(177, 15);
+            this.optLogTempDir.Name = "optLogTempDir";
+            this.optLogTempDir.Size = new System.Drawing.Size(95, 17);
+            this.optLogTempDir.TabIndex = 16;
+            this.optLogTempDir.Text = "Temp directory";
+            this.infoTip.SetToolTip(this.optLogTempDir, "Enable logging to the %TEMP% directory");
+            this.optLogTempDir.UseVisualStyleBackColor = true;
+            // 
+            // optLogNo
+            // 
+            this.optLogNo.AutoSize = true;
+            this.optLogNo.Checked = true;
+            this.optLogNo.Location = new System.Drawing.Point(6, 15);
+            this.optLogNo.Name = "optLogNo";
+            this.optLogNo.Size = new System.Drawing.Size(39, 17);
+            this.optLogNo.TabIndex = 14;
+            this.optLogNo.TabStop = true;
+            this.optLogNo.Text = "No";
+            this.infoTip.SetToolTip(this.optLogNo, "Disable logging");
+            this.optLogNo.UseVisualStyleBackColor = true;
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.chkUpdateOnLocalIPChange);
             this.groupBox1.Controls.Add(this.txtUpdateLink);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.label10);
@@ -443,6 +480,20 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Main settings";
             // 
+            // chkUpdateOnLocalIPChange
+            // 
+            this.chkUpdateOnLocalIPChange.Checked = true;
+            this.chkUpdateOnLocalIPChange.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUpdateOnLocalIPChange.Enabled = false;
+            this.chkUpdateOnLocalIPChange.Location = new System.Drawing.Point(216, 115);
+            this.chkUpdateOnLocalIPChange.Name = "chkUpdateOnLocalIPChange";
+            this.chkUpdateOnLocalIPChange.Size = new System.Drawing.Size(100, 30);
+            this.chkUpdateOnLocalIPChange.TabIndex = 6;
+            this.chkUpdateOnLocalIPChange.Text = "Update also on local IP change";
+            this.infoTip.SetToolTip(this.chkUpdateOnLocalIPChange, "Useful extra as it attempt to detect when you change network: new interface (wifi" +
+        "/ethernet) or new ip, this can\'t be perfect so timed update will be always on");
+            this.chkUpdateOnLocalIPChange.UseVisualStyleBackColor = true;
+            // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -462,7 +513,7 @@
             this.groupBox2.Location = new System.Drawing.Point(12, 168);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(406, 181);
-            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Utility";
             // 
@@ -476,7 +527,7 @@
             this.groupBox4.Location = new System.Drawing.Point(6, 136);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(394, 40);
-            this.groupBox4.TabIndex = 17;
+            this.groupBox4.TabIndex = 18;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Autorun";
             // 
@@ -491,44 +542,9 @@
             this.groupBox3.Location = new System.Drawing.Point(6, 97);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(394, 37);
-            this.groupBox3.TabIndex = 13;
+            this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Log mode";
-            // 
-            // optLogAppDir
-            // 
-            this.optLogAppDir.AutoSize = true;
-            this.optLogAppDir.Location = new System.Drawing.Point(51, 15);
-            this.optLogAppDir.Name = "optLogAppDir";
-            this.optLogAppDir.Size = new System.Drawing.Size(120, 17);
-            this.optLogAppDir.TabIndex = 14;
-            this.optLogAppDir.Text = "Application directory";
-            this.infoTip.SetToolTip(this.optLogAppDir, "Enable logging where you have placed the program");
-            this.optLogAppDir.UseVisualStyleBackColor = true;
-            // 
-            // optLogTempDir
-            // 
-            this.optLogTempDir.AutoSize = true;
-            this.optLogTempDir.Location = new System.Drawing.Point(177, 15);
-            this.optLogTempDir.Name = "optLogTempDir";
-            this.optLogTempDir.Size = new System.Drawing.Size(95, 17);
-            this.optLogTempDir.TabIndex = 15;
-            this.optLogTempDir.Text = "Temp directory";
-            this.infoTip.SetToolTip(this.optLogTempDir, "Enable logging to the %TEMP% directory");
-            this.optLogTempDir.UseVisualStyleBackColor = true;
-            // 
-            // optLogNo
-            // 
-            this.optLogNo.AutoSize = true;
-            this.optLogNo.Checked = true;
-            this.optLogNo.Location = new System.Drawing.Point(6, 15);
-            this.optLogNo.Name = "optLogNo";
-            this.optLogNo.Size = new System.Drawing.Size(39, 17);
-            this.optLogNo.TabIndex = 13;
-            this.optLogNo.TabStop = true;
-            this.optLogNo.Text = "No";
-            this.infoTip.SetToolTip(this.optLogNo, "Disable logging");
-            this.optLogNo.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -648,6 +664,7 @@
         private System.Windows.Forms.RadioButton optLogTempDir;
         private System.Windows.Forms.RadioButton optLogNo;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckBox chkUpdateOnLocalIPChange;
     }
 }
 

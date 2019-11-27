@@ -7,6 +7,8 @@ using System.IO;
 using System.Net;
 using Microsoft.Win32;
 using System.Security.Principal;
+using System.Net.NetworkInformation;
+using System.Collections.Generic;
 
 namespace DynamicDnsUpdater
 {
@@ -22,6 +24,8 @@ namespace DynamicDnsUpdater
         const string taskName = "DynamicDnsUpdater"; //both regedit and schtasks
         //const string updateLinkIPv6= "https://update6.dedyn.io"; //NOT USED NOW
         const string checkIpLink = "https://checkip.dedyn.io";
+        List<string> oldNetCardIdAndIp = null; //used by IpIdChangedSinceLastCall
+        int ipBasedUpdaterRateLimiter = 3;//change also max "lives" in the wait timer
 
         /// <summary>
         /// Check if user is administrator
@@ -47,11 +51,11 @@ namespace DynamicDnsUpdater
         /// Returns program path (and exe name if needed), path ends with '\' but doesn't contain ""
         /// </summary>
         /// <returns></returns>
-        public string GetExePath(bool includeProgramName=false)
+        public string GetExePath(bool includeProgramName = false)
         {
             string exePath = Application.ExecutablePath;//damn .net framework that doesnt sanitize the path!
             exePath = exePath.Replace('/', '\\');
-            if (includeProgramName==false)
+            if (includeProgramName == false)
                 exePath = exePath.Substring(0, exePath.LastIndexOf('\\') + 1);
             return exePath;
         }
@@ -105,7 +109,7 @@ namespace DynamicDnsUpdater
         /// <param name="str">message to be logged</param>
         public void AddLog(string str)
         {
-            if (AppSettings.logSetting==AppSettings.logSettingEnum.logHere)
+            if (AppSettings.logSetting == AppSettings.logSettingEnum.logHere)
             {
                 if (streamLogLocal == null)
                     InitLogLocal();
@@ -133,7 +137,7 @@ namespace DynamicDnsUpdater
                     }
                     catch (Exception) { }
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -150,7 +154,7 @@ namespace DynamicDnsUpdater
             TimeSpan diff = t.myTime.Subtract(t.oldTime);
             if ((uint)diff.TotalSeconds < seconds)
                 return false; //not yet
-            t.oldTime = new DateTime(0); //reset
+            t.oldTime = t.myTime; //reset
             return true; //done
         }
 
@@ -227,7 +231,7 @@ namespace DynamicDnsUpdater
                     AddLog("Error, server null or empty response");
                     return UpdateStatus.UpdateFailed;
                 }
-                if (result.StartsWith("good",StringComparison.OrdinalIgnoreCase)==true || (result.StartsWith("nochg", StringComparison.OrdinalIgnoreCase) == true)) //compare + ignore case (start with? good || nochg)
+                if (result.StartsWith("good", StringComparison.OrdinalIgnoreCase) == true || (result.StartsWith("nochg", StringComparison.OrdinalIgnoreCase) == true)) //compare + ignore case (start with? good || nochg)
                     return UpdateStatus.OK;
                 else
                 {
@@ -245,11 +249,11 @@ namespace DynamicDnsUpdater
                     case WebExceptionStatus.ConnectFailure:
                         AddLog("Error, ConnectFailure: " + ex.Message);
                         return UpdateStatus.Firewalled;
-                        //break; //break is not needed since we immediatly return but we keep it here in case new lines will be added
+                    //break; //break is not needed since we immediatly return but we keep it here in case new lines will be added
                     case WebExceptionStatus.NameResolutionFailure:
                         AddLog("Error, NameResolutionFailure: " + ex.Message);
                         return UpdateStatus.NotConnected;
-                        //break;
+                    //break;
                     case WebExceptionStatus.ProtocolError:
                         HttpWebResponse r = (HttpWebResponse)ex.Response;
                         if (r == null)
@@ -261,10 +265,10 @@ namespace DynamicDnsUpdater
                         {
                             case HttpStatusCode.Unauthorized:
                                 return UpdateStatus.Unauthorized;
-                                //break;
+                            //break;
                             case HttpStatusCode.NotFound:
                                 return UpdateStatus.UserNotFound;
-                                //break;
+                            //break;
                             default: //unhandled exception
                                 AddLog("Error, WebResponse returned: " + r.StatusCode.ToString());
                                 AddLog("UPDATE Exception: " + ex.Message);
@@ -276,7 +280,7 @@ namespace DynamicDnsUpdater
                     case WebExceptionStatus.Timeout:
                         AddLog("Error, ConnectFailure, timeout: " + ex.Message);
                         return UpdateStatus.Firewalled;
-                        //break;
+                    //break;
                     default: //unhandled exception
                         AddLog("UPDATE Exception, unknown status: " + ex.Message);
                         if (ex.InnerException != null)
@@ -299,7 +303,7 @@ namespace DynamicDnsUpdater
         /// <param name="userMode"></param>
         /// <param name="program"></param>
         /// <param name="arguments"></param>
-        public bool AddTask(bool userMode, string program,string arguments=null)
+        public bool AddTask(bool userMode, string program, string arguments = null)
         {
             if (userMode == true)
             {
@@ -343,7 +347,7 @@ namespace DynamicDnsUpdater
 
                     IExecAction action = (IExecAction)task.Actions.Create(_TASK_ACTION_TYPE.TASK_ACTION_EXEC); // the type of action to run .exe, there are others to send mail and show msg, both already depracated by Microsoft.
                     action.Path = program;
-                    if (arguments!=null)
+                    if (arguments != null)
                         action.Arguments = arguments;
                     //action.WorkingDirectory = "C:\\windows\\system32";
 
@@ -359,7 +363,7 @@ namespace DynamicDnsUpdater
             }
             return false;
         }
-        
+
         /// <summary>
         /// Deletes the task
         /// </summary>
@@ -434,26 +438,159 @@ namespace DynamicDnsUpdater
         }
 
         /// <summary>
+        /// returns interfaces that are up and has type: ethernet or wifi
+        /// </summary>
+        /// <returns></returns>
+        public List<NetworkInterface> ListActiveInterfaces()
+        {
+            List<NetworkInterface> validInterfaces = new List<NetworkInterface>();
+            try
+            {
+                NetworkInterface[] interfcaces = NetworkInterface.GetAllNetworkInterfaces();
+                for (int i = 0; i < interfcaces.Length; i++)
+                {
+                    //less restrictive filter might be != NetworkInterfaceType.Loopback, now is strict compared to GetIsNetworkAvailable()
+                    if (interfcaces[i].OperationalStatus == OperationalStatus.Up && (interfcaces[i].NetworkInterfaceType == NetworkInterfaceType.Ethernet || interfcaces[i].NetworkInterfaceType == NetworkInterfaceType.Wireless80211))
+                        validInterfaces.Add(interfcaces[i]);
+                }
+            }
+            catch (Exception)
+            {
+                return new List<NetworkInterface>();
+            }
+            return validInterfaces;
+        }
+
+        /// <summary>
+        /// returns ipv4 of the interface (the first internet ipv4)
+        /// </summary>
+        /// <param name="netInterface"></param>
+        /// <returns></returns>
+        public IPAddress QueryInterfaceIP(NetworkInterface netInterface)
+        {
+            IPAddress ip = null;
+            try
+            {
+                IPInterfaceProperties ipInfo = netInterface.GetIPProperties();
+                for (int i = 0; i < ipInfo.UnicastAddresses.Count; i++)
+                {
+                    if (ipInfo.UnicastAddresses[i].Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        ip = ipInfo.UnicastAddresses[i].Address;
+                        break;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return ip;
+        }
+
+        /// <summary>
+        /// returns a unique identifier string composed by cardid+ip
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetInterfaceIdIpList()
+        {
+            List<NetworkInterface> li = ListActiveInterfaces();
+            if (li.Count == 0)
+                return new List<string>();
+            List<string> idip = new List<string>();
+            for (int i = 0; i < li.Count; i++)
+            {
+                IPAddress ip = QueryInterfaceIP(li[i]);
+                string ipStr = "";
+                if (ip != null)
+                    ipStr = ip.ToString();
+                idip.Add(li[i].Id.ToString() + ipStr);
+            }
+            return idip;
+        }
+
+        /// <summary>
+        /// returns true if the network status (id+ip) is not equal to the old one and there is a connection, false if status is not changed, there are 0 connections, first call
+        /// </summary>
+        /// <returns></returns>
+        public bool IpIdChangedSinceLastCall()
+        {
+            bool ipOrNetworkCardChanged = false;
+            List<string> currentNetCardIdAndIp = GetInterfaceIdIpList();
+            if (oldNetCardIdAndIp == null)
+            {
+                oldNetCardIdAndIp = currentNetCardIdAndIp;
+                return false; //first start
+            }
+            if (oldNetCardIdAndIp.Count == currentNetCardIdAndIp.Count)
+            {
+                for (int i = 0; i < oldNetCardIdAndIp.Count; i++)
+                {
+                    if (oldNetCardIdAndIp.Contains(currentNetCardIdAndIp[i]) == false)//check if ip or network card is changed
+                        ipOrNetworkCardChanged = true;
+                }
+            }
+            else
+                ipOrNetworkCardChanged = true; //number of active network cards changed, update ddns
+            if (currentNetCardIdAndIp.Count == 0)
+                ipOrNetworkCardChanged = false;//connected to disconnected is a change, but a useless one
+            oldNetCardIdAndIp = currentNetCardIdAndIp;
+            return ipOrNetworkCardChanged;
+        }
+
+        /// <summary>
         /// Wait the desidered time and update DNS
         /// </summary>
         public void WaitAndUpdate()
         {
             UpdateStatus ret;
-            timerWait t = new timerWait();
+            timerWait tmrTimedUpdate = new timerWait();
+            timerWait tmrIpChangeDetect = new timerWait();
+            timerWait tmrIpChangeUpdate = new timerWait();
+            bool ipChanged = false;
+            timerWait tmrRateLimiter = new timerWait();
 
             ret = UpdateDns(AppSettings.user, AppSettings.password, AppSettings.hostname, AppSettings.updateLink);
             AppSettings.lastUpdateStatus = ret;
             AppSettings.lastUpdateStatusChanged = true;
             AddLog("Updating DNS: " + ret.ToString());
 
-            while (AppSettings.exitUpdateLoop==false)
+            while (AppSettings.exitUpdateLoop == false)
             {
-                if (Wait(ref t, AppSettings.updateInterval*60) == true)//default updateInterval is 60 min
+                if (Wait(ref tmrTimedUpdate, AppSettings.updateInterval * 60) == true)//default updateInterval is 60 min
                 {
                     ret = UpdateDns(AppSettings.user, AppSettings.password, AppSettings.hostname, AppSettings.updateLink);
                     AppSettings.lastUpdateStatus = ret;
                     AppSettings.lastUpdateStatusChanged = true;
                     AddLog("Updating DNS: " + ret.ToString());
+                    oldNetCardIdAndIp = null;//prevent next ip change check from trigger: if you boot from standby after long time and every timer is expired, probably you are also reconnecting, no need to update twice
+                }
+                if (AppSettings.checkAlsoLocalIpChange == true)
+                {
+                    if (Wait(ref tmrIpChangeDetect, 30) == true)//every 30 second check for local ip change
+                    {
+                        ipChanged = IpIdChangedSinceLastCall();
+                        tmrIpChangeUpdate.oldTime = DateTime.Now;//reset timer
+                    }
+                    if (Wait(ref tmrIpChangeUpdate, 15) == true && ipChanged == true && ipBasedUpdaterRateLimiter > 0)//after 15 second do the actual update
+                    {
+                        //if status changed and i have lives, update ddns. 30sec delay to ensure you are connected after network change
+                        ipChanged = false;//disable timer
+                        ipBasedUpdaterRateLimiter--;//use a life
+                        ret = UpdateDns(AppSettings.user, AppSettings.password, AppSettings.hostname, AppSettings.updateLink);
+                        AppSettings.lastUpdateStatus = ret;
+                        AppSettings.lastUpdateStatusChanged = true;
+                        tmrTimedUpdate.oldTime = DateTime.Now;//reset timer, we updated just now because of ip change, so reset timed update
+                        if (ipBasedUpdaterRateLimiter>0)
+                            AddLog("Ip changed, updating DNS: " + ret.ToString());
+                        else
+                            AddLog("Ip changed (rate limited), updating DNS: " + ret.ToString());
+                    }
+                    if (Wait(ref tmrRateLimiter, 10 * 60) == true)//every 10 minutes add a "life" to rate limiter counter
+                    {
+                        if (ipBasedUpdaterRateLimiter < 3)
+                            ipBasedUpdaterRateLimiter++;//this means that you have 3 fast(30 sec) updates and then you will be rate limited to 1 every 5 minutes, in case of slower update you eventually regain all 3 fast updates
+                    }
                 }
                 System.Threading.Thread.Sleep(1000);//1 sec
             }
@@ -486,6 +623,9 @@ namespace DynamicDnsUpdater
                     string logOption = "nolog";
                     if (reader.EndOfStream == false)//compatibility with older version (where there wasn't log setting)
                         logOption = reader.ReadLine().ToLower();
+                    bool checkIpUpdate = false;
+                    if (reader.EndOfStream == false)//compatibility with older version (where there wasn't ip setting)
+                        checkIpUpdate = Convert.ToBoolean(reader.ReadLine());
                     if (reader.EndOfStream == false)
                         throw new Exception("Incorrect file format, too long");
                     reader.Close(); //if we reach this point settings has been sucesfully read
@@ -515,6 +655,7 @@ namespace DynamicDnsUpdater
                     AppSettings.originalLogSetting = tempLogStatus;
                     if (AppSettings.overrideLogOption == false)//log option from cmdline, don't use file settings
                         AppSettings.logSetting = tempLogStatus;
+                    AppSettings.checkAlsoLocalIpChange = checkIpUpdate;
                     AppSettings.firstRun = false;
                     AddLog("Settings read OK");
                     return true;
@@ -543,10 +684,11 @@ namespace DynamicDnsUpdater
                 writer.WriteLine(AppSettings.hostname);
                 writer.WriteLine(AppSettings.updateLink);
                 writer.WriteLine(AppSettings.updateInterval.ToString());
-                if (AppSettings.overrideLogOption==false)
+                if (AppSettings.overrideLogOption == false)
                     writer.WriteLine(AppSettings.logSetting.ToString());//devo scrivere l'originale
                 else
                     writer.WriteLine(AppSettings.originalLogSetting.ToString());
+                writer.WriteLine(AppSettings.checkAlsoLocalIpChange);
                 writer.Close();
                 AddLog("Settings saved OK");
                 return true;

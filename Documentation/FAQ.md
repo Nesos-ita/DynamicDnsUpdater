@@ -3,6 +3,21 @@
 On first open: after you fill and confirm settings;  
 Otherwise as soon as you open it.
 
+### What is update also on local IP change?
+It is an option that will update your ddns when it detects:
+ - local ip change (on any ethernet or wifi network interface)
+ - network interface change (for example you switch from wifi to ethernet)
+ - both
+
+You should enable it unless it cause some problem (check logs to see if it is fired too many times).  
+This is an extra, the timer based updater will always work as usual.  
+This because local ip change doesn't necessary means public ip is changed and public ip change doesn't mean that local will change too.  
+Since there are so many network configurations i decided to rate limit this: it will check for any network change every 30 seconds, but if there are 3 consecutive changes it will be rate limited to one every 10 minutes.  
+I also added a 15 seconds delay between ip change detection and the actual update, in this way the os has time to connect (for example on sleep wakeup)
+Change from connection present to disconnected will not count as ip change, while the opposite will.  
+The timed update will stop ip change detection for the next detection to avoid double updates.  
+In the same way, in case of ip change triggered update, the timed updater timer will be resetted.
+
 ### Where settings are saved?
 In a text file named "dduSettings.txt" located where the program is stored  
 

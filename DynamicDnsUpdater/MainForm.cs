@@ -5,6 +5,8 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Windows.Forms;
+using System.Net.NetworkInformation;
+using System.Collections.Generic;
 
 namespace DynamicDnsUpdater
 {
@@ -96,7 +98,7 @@ namespace DynamicDnsUpdater
                 txtUpdateLink.Enabled = true;
                 numInterval.Enabled = true;
                 btnUpdateNow.Enabled = false;
-                
+                chkUpdateOnLocalIPChange.Enabled = true;
             }
             else
             {
@@ -107,6 +109,7 @@ namespace DynamicDnsUpdater
                 txtUpdateLink.Enabled = false;
                 numInterval.Enabled = false;
                 btnUpdateNow.Enabled = true;
+                chkUpdateOnLocalIPChange.Enabled = false;
             }
         }
 
@@ -174,6 +177,7 @@ namespace DynamicDnsUpdater
                 txtHostname.Text = AppSettings.hostname;
                 txtUpdateLink.Text = AppSettings.updateLink;
                 numInterval.Value = AppSettings.updateInterval;
+                chkUpdateOnLocalIPChange.Checked = AppSettings.checkAlsoLocalIpChange;
                 StartUpdateTask(); //everything is correct so start the update task
             }
             StartStatusUpdaterTask(); //label updater task
@@ -200,6 +204,7 @@ namespace DynamicDnsUpdater
                 AppSettings.hostname = txtHostname.Text;
                 AppSettings.updateLink = txtUpdateLink.Text;
                 AppSettings.updateInterval = Convert.ToUInt32(numInterval.Value);
+                AppSettings.checkAlsoLocalIpChange = chkUpdateOnLocalIPChange.Checked;
                 if (utils.SaveSettings() == false) //save new settings to file
                     MessageBox.Show("Error saving settings\nCheck log (if enabled) for more informations", "Problem", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 StartUpdateTask(); //start task

@@ -12,6 +12,7 @@
         public static string updateLink = "";
         public static uint updateInterval=1;        
         public static logSettingEnum logSetting = logSettingEnum.noLog;
+        public static bool checkAlsoLocalIpChange = true;
 
         //Settings from cmdLine
         public static bool overrideLogOption = false; //if true, we have log options from cmdline, so we ignore the one from file

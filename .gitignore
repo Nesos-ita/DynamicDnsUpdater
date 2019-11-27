@@ -8,6 +8,7 @@
 *.sln.docstates
 Compiled Binary/dduSettings.txt
 Compiled Binary/ddu.log
+Compiled Binary/sign command.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
