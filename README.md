@@ -7,6 +7,7 @@
 3. Open and follow on screen instructions  (fill data and click ok)
 
 ## For [deSEC](https://desec.io/#!/en/) users:  
+if you received an email from deSEC about tls1.0 version i'm going to fix the issue by upgrading to a newer .net framework that support TLS1.2, [check here](https://github.com/Nesos-ita/DynamicDnsUpdater/issues/3) for the current status.  
 - username field: fill with your hostname (example: something.dedyn.io)  
 - password field: fill with your password (you should have received it by email)  
 - hostname field: fill with your hostname (same as username field)  
