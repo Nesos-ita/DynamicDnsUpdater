@@ -11,6 +11,7 @@ and here: <http://big.info/2014/01/what-does-type-safe-mean-c.html>
 * It uses ASLR in every dll that it uses (which is NOT a secondary thing [look what can happen if you don't use aslr in every module](https://www.exploit-db.com/exploits/36207/))  
 (keep in mind that having enabled only one between dep or aslr doesn't help at all and if aslr is not used in every single dll it is useless)  
 * It places dobulequota when setting autorun if there is a space in the path (try to copy some program in C:\ and call it program.exe, weird things might happen...)
+* It enforce tls1.2 or 1.3, but note that windows does not support tls1.3 yet so we will have to wait that they add in schannel support for tls1.3 (will probably happen in the future automatically with window update) 
 
 ### How do i know that the exe doesn't have a backdoor that is not present in the source code?
 You can compile it yourself if you don't trust the exe and then [check the differences](https://madiba.encs.concordia.ca/%7Ex_decarn/truecrypt-binaries-analysis/) 

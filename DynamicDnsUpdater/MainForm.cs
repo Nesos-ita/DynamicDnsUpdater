@@ -32,7 +32,7 @@ namespace DynamicDnsUpdater
             updaterThread.Start();
             statusImg.BackColor = ColorTranslator.FromHtml("#5AFF5A"); //green
             statusImg.Checked = true;
-            lblStatus.Text = "DDNS upadater running";            
+            lblStatus.Text = "DDNS upadater running";
             utils.AddLog("DDNS upadater running");
         }
 
@@ -44,7 +44,7 @@ namespace DynamicDnsUpdater
             this.Refresh(); //refresh status label
             //updaterTask.Wait(); // wait that the task finish, usually <1 sec, max 11 (long connection timeout)
             //updaterTask = null;            
-            while (updaterThread!=null && updaterThread.IsAlive == true)
+            while (updaterThread != null && updaterThread.IsAlive == true)
                 Thread.Sleep(100);
             updaterThread = null;
             statusImg.BackColor = ColorTranslator.FromHtml("#FF5A5A"); //red
@@ -64,7 +64,7 @@ namespace DynamicDnsUpdater
                     //if connection error, keep trying
                     if (AppSettings.lastUpdateStatus != utilityFunctions.UpdateStatus.OK && AppSettings.lastUpdateStatus != utilityFunctions.UpdateStatus.NotConnected && AppSettings.lastUpdateStatus != utilityFunctions.UpdateStatus.Firewalled)
                         Invoke((MethodInvoker)delegate () { StopUpdateTask(); });
-                    lblStatus.Text = "Update result: " + AppSettings.lastUpdateStatus.ToString();                    
+                    lblStatus.Text = "Update result: " + AppSettings.lastUpdateStatus.ToString();
                 }
                 System.Threading.Thread.Sleep(2000);
             }
@@ -89,7 +89,7 @@ namespace DynamicDnsUpdater
         /// <param name="editMode"></param>
         void EditOKMode(bool editMode)
         {
-            if (editMode==true)
+            if (editMode == true)
             {
                 btnEditOK.Text = "&OK";
                 txtUser.Enabled = true;
@@ -138,7 +138,7 @@ namespace DynamicDnsUpdater
         {
             optAutorunUser.Checked = utils.TaskExist(true);
             optAutorunAdmin.Checked = utils.TaskExist(false);
-            if (AppSettings.overrideLogOption==true)//log options can be indipendent from the file, always fix here
+            if (AppSettings.overrideLogOption == true)//log options can be indipendent from the file, always fix here
             {
                 optLogNo.Enabled = false;
                 optLogTempDir.Enabled = false;
@@ -164,11 +164,11 @@ namespace DynamicDnsUpdater
             if (optAutorunUser.Checked || optAutorunAdmin.Checked)
                 optAutorunNo.Checked = false;
 
-            if (AppSettings.firstRun==true)
+            if (AppSettings.firstRun == true)
             {
                 EditOKMode(true); //set in edit mode and don't start updater task
                 lblStatus.Text = "That (red) square shows if the Dynamic DNS updater task is running";
-                utils.AddLog("First run mode (no settings file or can't open)");                
+                utils.AddLog("First run mode (no settings file or can't open)");
             }
             else //we have a file, fix the gui
             {
@@ -251,14 +251,14 @@ namespace DynamicDnsUpdater
 
         private void btnResolveHostname_Click(object sender, EventArgs e)
         {
-            if (txtHostResolve.Text=="")
+            if (txtHostResolve.Text == "")
             {
                 lblStatus.Text = "Write something in the textbox before resolving";
                 return;
             }
             lblStatus.Text = "Resolving...";
             this.Refresh();
-            IPHostEntry h=null;
+            IPHostEntry h = null;
             try
             {
                 h = Dns.GetHostEntry(txtHostResolve.Text);
@@ -269,14 +269,14 @@ namespace DynamicDnsUpdater
                 txtIpResolved.Text = "";
                 return;
             }
-            if (h==null)
+            if (h == null)
             {
                 lblStatus.Text = "Error while resolving hostname: HostEntry is null";
                 txtIpResolved.Text = "";
                 return;
             }
             IPAddress[] ipList = h.AddressList;
-            if (ipList==null || ipList.Length==0)
+            if (ipList == null || ipList.Length == 0)
             {
                 lblStatus.Text = "Error while resolving hostname: no ip found";
                 txtIpResolved.Text = "";
@@ -294,8 +294,8 @@ namespace DynamicDnsUpdater
         private void tryIcon_Click(object sender, EventArgs e)
         {
             MouseEventArgs m = (MouseEventArgs)e;
-            if (m.Button==MouseButtons.Right)
-                trayIconMenu.Show(Cursor.Position.X,Cursor.Position.Y);
+            if (m.Button == MouseButtons.Right)
+                trayIconMenu.Show(Cursor.Position.X, Cursor.Position.Y);
         }
 
         private void txtIP_Click(object sender, EventArgs e)
@@ -307,10 +307,10 @@ namespace DynamicDnsUpdater
         {
             txtIpResolved.SelectAll();
         }
-      
+
         private void optAutorunNo_CheckedChanged(object sender, EventArgs e)
         {
-            if (optAutorunNo.Checked==true)
+            if (optAutorunNo.Checked == true)
             {
                 bool result1 = utils.DeleteTask(true);
                 bool result2 = utils.DeleteTask(false);
@@ -340,7 +340,7 @@ namespace DynamicDnsUpdater
                     {
                         File.Copy(myExe, programNewExe, true); //always try to overwrite (in case of an update) but ignore error so it will work also if file exists and is opened (can't replace)
                     }
-                    catch (Exception){}
+                    catch (Exception) { }
                     if (File.Exists(programNewExe) == false) //if there is no file is a problem
                         throw new Exception("Can't copy exe to destination");
 
@@ -374,7 +374,7 @@ namespace DynamicDnsUpdater
         {
             if (optAutorunUser.Checked == true)
             {
-                if (File.Exists(utils.GetExePath(false) + AppSettings.settingsFileName) ==false)
+                if (File.Exists(utils.GetExePath(false) + AppSettings.settingsFileName) == false)
                 {
                     optAutorunUser.Checked = false;
                     optAutorunNo.Checked = true;
@@ -398,7 +398,7 @@ namespace DynamicDnsUpdater
             string whichLog = "";
             try
             {
-                string logFile = "";                
+                string logFile = "";
                 switch (AppSettings.logSetting)
                 {
                     case AppSettings.logSettingEnum.logTemp:

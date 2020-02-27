@@ -59,11 +59,11 @@ namespace DynamicDnsUpdater
             }
             if (help == true) //showed only once
                 MessageBox.Show(
-                    "-help\tShow this message\n"+
+                    "-help\tShow this message\n" +
                     "Note: if you specify a log option the corresponding file setting is ignored;\nlog setting in file is not changed\n" +
-                    "-NoLog\tDisable log\n"+
-                    "-LogTemp\tEnable logging to file %TEMP%\\" + AppSettings.logFileName + "\n"+
-                    "-LogHere\tEnable logging to file in application directory\n"+
+                    "-NoLog\tDisable log\n" +
+                    "-LogTemp\tEnable logging to file %TEMP%\\" + AppSettings.logFileName + "\n" +
+                    "-LogHere\tEnable logging to file in application directory\n" +
                     "-bg\tStarts in background mode (no GUI)"
 
                     , "Available commands (case insensitive):");
@@ -80,6 +80,9 @@ namespace DynamicDnsUpdater
             AppDomain.CurrentDomain.AssemblyResolve += (sender, arg) => { if (arg.Name.StartsWith("Interop.TaskScheduler")) return Assembly.Load(Properties.Resources.Interop_TaskScheduler); return null; }; //embedded dependency
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            //Enforce using Tls1.2 or 1.3 before any connection (Tls 1.0 and 1.1 are disabled)
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls13 | System.Net.SecurityProtocolType.Tls12;
 
             //my pre-gui added code (command line)
             if (args.Length != 0)

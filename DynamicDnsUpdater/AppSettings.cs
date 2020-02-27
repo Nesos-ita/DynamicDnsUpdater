@@ -10,7 +10,7 @@
         public static string password = "";
         public static string hostname = "";
         public static string updateLink = "";
-        public static uint updateInterval=1;        
+        public static uint updateInterval = 1;
         public static logSettingEnum logSetting = logSettingEnum.noLog;
         public static bool checkAlsoLocalIpChange = true;
 
@@ -24,7 +24,7 @@
 
         //Settings internal
         public static bool exitUpdateLoop = false;
-        public static utilityFunctions.UpdateStatus lastUpdateStatus=utilityFunctions.UpdateStatus.NotConnected;
+        public static utilityFunctions.UpdateStatus lastUpdateStatus = utilityFunctions.UpdateStatus.NotConnected;
         public static bool lastUpdateStatusChanged = false;
         public static string logFileName = "ddu.log";
         public static string settingsFileName = "dduSettings.txt";

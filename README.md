@@ -7,7 +7,7 @@
 3. Open and follow on screen instructions  (fill data and click ok)
 
 ## For [deSEC](https://desec.io/#!/en/) users:  
-if you received an email from deSEC about tls1.0 version i'm going to fix the issue by upgrading to a newer .net framework that support TLS1.2, [check here](https://github.com/Nesos-ita/DynamicDnsUpdater/issues/3) for the current status.  
+if you received an email from deSEC about dropping support to tls1.0 i have released a new version that enforce tls1.2 and support tls1.3 ensure to have the latest version.  
 - username field: fill with your hostname (example: something.dedyn.io)  
 - password field: fill with your password (you should have received it by email)  
 - hostname field: fill with your hostname (same as username field)  
@@ -16,8 +16,7 @@ if you received an email from deSEC about tls1.0 version i'm going to fix the is
 
 Click OK to confirm and that is all what you need to do!
 ## Documentation
-If for some reason you don't have .NET framework 3.0 you should be able to download it from here: [.NET 3.0 (64bit)](http://go.microsoft.com/fwlink/?LinkId=98106) -
-[.NET 3.0 (32bit)](http://download.microsoft.com/download/8/F/E/8FEEE89D-9E4F-4BA3-993E-0FFEA8E21E1B/NetFx30SP1_x86.exe)  
+If for some reason you don't have .NET framework 4.8 you should be able to download it from here: [.NET 4.8 (64bit)](http://go.microsoft.com/fwlink/?LinkId=2085155)  
 
 If there is an error different from a connection problem, for example: wrong pasword, the updater will stop (red square); Check if settings are correct.  
 If something doesn't work try to enable and view the log, it has useful informations inside; you can also set the log option from commandline.  

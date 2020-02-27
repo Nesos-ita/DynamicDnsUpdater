@@ -581,7 +581,7 @@ namespace DynamicDnsUpdater
                         AppSettings.lastUpdateStatus = ret;
                         AppSettings.lastUpdateStatusChanged = true;
                         tmrTimedUpdate.oldTime = DateTime.Now;//reset timer, we updated just now because of ip change, so reset timed update
-                        if (ipBasedUpdaterRateLimiter>0)
+                        if (ipBasedUpdaterRateLimiter > 0)
                             AddLog("Ip changed, updating DNS: " + ret.ToString());
                         else
                             AddLog("Ip changed (rate limited), updating DNS: " + ret.ToString());
